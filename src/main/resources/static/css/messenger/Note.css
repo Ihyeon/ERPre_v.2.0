@@ -1,47 +1,3 @@
-/* 드롭 다운 */
-.dropdown-header { position: relative; cursor: pointer;  display: flex;  align-items: center; }
-.dropdown-title { display: flex; align-items: center; font-size: 23px; }
-.dropdown-content {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    margin-top: 5px;
-    z-index: 10;
-    width: 117px;
-    overflow: hidden;
-    font-size: 26px;
-}
-
-.dropdown-item {
-    padding: 5px 7px;
-    cursor: pointer;
-    font-size: 22px;
-    color: #333;
-    transition: background-color 0.2s ease;
-}
-
-.dropdown-item:hover {
-    background-color: #f0f0f0;
-}
-
-.dropdown-item:active {
-    background-color: #e0e0e0;
-}
-
-.dropdown-header .dropdown-title svg {
-    transition: transform 0.3s;
-    margin-left: 5px;
-    font-size: 23px;
-}
-
-.dropdown-header:hover .dropdown-title svg {
-    transform: rotate(180deg);
-}
-
 /* 전체 */
 .note-list-container {
     width: 100%;
@@ -57,52 +13,29 @@
 }
 
 /* 헤더 */
-.note-list-header {
-    padding: 3px;
-    border-bottom: 1px solid #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
 
-.new-note-button,
-.delete-note-button {
-    margin-left: 10px;
-    background: none;
-    border: none;
-    font-size: 21px;
-    cursor: pointer;
-    color: #a2a2a2;
-}
+/* 검색 및 필터 */
 
-.note-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-}
 
-.note-header h3 {
-    font-size: 18px;
-    font-weight: bold;
-}
+/* 드롭 메뉴 & 아이콘 */
+.note-list-header { padding: 3px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: flex-end; }
+.new-note-button, .delete-note-button { margin-left: 10px; background: none; border: none; font-size: 21px; cursor: pointer; color: #a2a2a2; }
+.note-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ddd; margin-bottom: 10px; }
+.note-header h3 { font-size: 18px; font-weight: bold; }
+.note-search input { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd; font-size: 14px; outline: none; }
+.dropdown-header { position: relative; cursor: pointer;  display: flex;  align-items: center; }
+.dropdown-title { display: flex; align-items: center; font-size: 23px; }
+.dropdown-content { position: absolute; top: 40px; left: 0; background-color: white; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-radius: 4px; margin-top: 5px; z-index: 10; width: 150px; overflow: hidden; font-size: 26px; }
 
-.note-search input {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-size: 14px;
-    outline: none;
-}
+.dropdown-item { padding: 5px 7px; cursor: pointer; font-size: 22px; color: #333; transition: background-color 0.2s ease; }
+.dropdown-item:hover { background-color: #f0f0f0; }
+.dropdown-item:active { background-color: #e0e0e0; }
 
-.note-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto;
-}
+.dropdown-header .dropdown-title svg { transition: transform 0.3s; margin-left: 5px; font-size: 23px; }
+.dropdown-header:hover .dropdown-title svg { transform: rotate(180deg); }
+
+/* 본문 */
+.note-list { list-style: none; margin: 0; padding: 0; overflow-y: auto;}
 
 .note-item {
     display: flex;
@@ -117,14 +50,9 @@
     justify-content: space-between;
 }
 
-.note-item.unread {
-    background-color:#f0f0f094;
-    font-weight: bold;
-}
-
+.note-item.unread { background-color:#f0f0f094; font-weight: bold; }
 .note-item:hover { background-color: #f9f9f9; }
 .note-item.unread:hover { background-color: #f0f0f094; }
-
 .note-star { margin-right: 12px; }
 .star-icon { color: #ccc; font-size: 19px;}
 .star-icon.active { color: #FFD700; }
@@ -144,7 +72,6 @@
 
 .note-content {
     font-size: 13px;
-
     color: #666;
     overflow: hidden;
     margin-top: 8px;
@@ -163,86 +90,35 @@
     padding-top: 4px;
 }
 
-/* 새로운 쪽지 */
-.new-note-modal {
-    color: #333;
-    position: fixed;
-    top: 20%;
-    left: 35%;
-    z-index: 1020;
-    width: 550px;
-    padding: 14px;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+/* NewNoteModal.js */
 
-.new-note-modal.react-draggable.react-draggable-dragged {
-    transform: translate(20px, -11px);
-}
+/* 공통 */
+.new-note-modal { color: #333; position: fixed; top: 20%; left: 35%; z-index: 1020; width: 550px; padding: 14px; background-color: white; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+.new-note-modal.react-draggable.react-draggable-dragged { transform: translate(20px, -11px); }
+.note-modal-body { margin-top: 15px; }
 
-.note-modal-body {
-    margin-top: 15px;
-}
+/* 수신자 태그와 검색 입력 */
+.receiver-section { display: flex; align-items: center; margin-bottom: 13px; margin-left: 5px; }
+.receiver-section label { margin-right: 4px; font-weight: bold; }
+.receiver-search-button { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; background-color: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; transition: background-color 0.2s ease; }
+.receiver-search-button:hover { background-color: #e9ecef; }
+.receiver-input-container { display: flex; flex-wrap: wrap; align-items: center; flex: 1; border: 1px solid #ccc; border-radius: 2px; margin-left: 2px; min-height: 40px; overflow-x: hidden; box-sizing: border-box; }
+.receiver-input { border: none; outline: none; flex: 1; padding: 4px; overflow: hidden; max-width: 100%; }
+.receiver-input:focus { border-color: #007bff; }
+.receiver-input:placeholder-shown { width: 410px;}
+.selected-receivers { display: flex; flex-wrap: wrap; white-space: nowrap; gap: 5px; align-items: center; }
+.receiver-tag { background-color: #bfdeff8f; color: black; font-weight: 500; padding: 5px 10px; border-radius: 20px; display: flex; align-items: center; font-size: 13px; margin-left: 3px; }
+.receiver-tag button { margin-left: 5px; }
+.receiver-tag button:hover { color: #d9534f; }
 
-.recipient-section {
-    display: flex;
-    align-items: center;
-    margin-bottom: 13px;
-    margin-left: 5px;
-}
+/* 자동완성 결과 */
+.autocomplete-suggestions { position: absolute; width: 520px; background-color: white; border: 1px solid #ddd; z-index: 1000; list-style: none; padding: 0; }
+.autocomplete-suggestions li { padding: 8px; cursor: pointer; font-size: 14px; color: #333; }
+.autocomplete-suggestions li:hover { background-color: #f0f0f0; }
+.autocomplete-suggestions li.selected { background-color: #f0f0f0; font-weight: bold; }
 
-.recipient-section label {
-    margin-right: 4px;
-    font-weight: bold;
-}
 
-.recipient-input-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    flex: 1;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    padding: 5px;
-    margin-left: 2px;
-    min-height: 40px;
-}
-
-.recipient-tag {
-    background-color: #bfdeff8f;
-    color: black;
-    font-weight: 500;
-    padding: 5px 10px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    font-size: 13px;
-}
-
-.recipient-tag button {
-    margin-left: 5px;
-}
-
-.recipient-input {
-    border: none;
-    outline: none;
-    flex: 1;
-    min-width: 100px;
-    padding: 4px;
-}
-
-.selected-recipients {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    align-items: center;
-    width: 100%;
-}
-
-button.note-employee-search {
-    margin-left: 4px;
-}
+button.note-employee-search { margin-left: 4px;}
 
 .note-employee-search {
     cursor: pointer;
@@ -252,110 +128,25 @@ button.note-employee-search {
     font-size: 15px; /* 아이콘 크기 조정 필요시 */
 }
 
-.options {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-    margin-left: 5px;
-}
+/* 전송 옵션 */
+.options { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; height: 40px;  }
+.options label { display: flex; align-items: center; gap: 5px; font-size: 16px; }
+.options input[type="checkbox"], .options input[type="date"] { padding: 0; margin: 0; box-sizing: border-box; vertical-align: middle; line-height: normal; }
 
-.options input[type="checkbox"]  {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 5px;
-}
+/* ReactQuill 에디터 */
+.ql-formats { align-items: center; }
+.ql-toolbar.ql-snow .ql-formats { margint-right: 0px; }
+.ql-toolbar.ql-snow { padding: 5px; }
+.note-textarea { height: 200px; overflow: auto; }
 
-.new-note-modal button.box.active  {
-    background-color: #f0f0f0 !important;
-    border-color: #f0f0f0 !important;
-    color: #333 !important;
-}
+/* 하단 버튼 */
+.send-button { background-color: #bfdeff8f; color: black; border: none; font-weight: 400; padding: 8px 13px; cursor: pointer; }
+.cancel-button { background-color: #9fa7ad; color: white; border: none; padding: 8px 13px; cursor: pointer; }
 
-.options input[type="date"] {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
 
-.message-textarea {
-    width: 100%;
-    height: 200px;
-}
+/* ReceiveredNoteModal.js */
 
-.note-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.send-button {
-    background-color: #bfdeff8f;
-    color: black;
-    border: none;
-    font-weight: 400;
-    padding: 8px 13px;
-    cursor: pointer;
-}
-
-.cancel-button {
-    background-color: #9fa7ad;
-    color: white;
-    border: none;
-    padding: 8px 13px;
-    cursor: pointer;
-}
-
-.close-button {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    color: #888;
-}
-
-/* 에디터 */
-#toolbar {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.ql-formats {
-    display: flex;
-    align-items: center !important;
-    margin-right: 10px;
-}
-
-.ql-formats button,
-.ql-formats select {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 24px;
-    padding: 0;
-    margin: 0;
-    border: none;
-    background: none;
-    font-size: 14px;
-}
-
-.ql-formats button svg {
-    width: 16px;
-    height: 16px;
-}
-
-.ql-toolbar.ql-snow {
-    border-bottom: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    padding: 5px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-/* 받은 쪽지 */
+/* 공통 */
 .received-note-modal {
     color: #333;
     position: fixed;

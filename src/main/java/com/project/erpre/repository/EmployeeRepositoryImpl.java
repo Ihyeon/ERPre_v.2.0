@@ -55,6 +55,17 @@ public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom {
         return new PageImpl<>(results, pageable, total);
     }
 
+    // 1-1. 쪽지 직원 이름 조회 (자동완성)
+    @Override
+    public List<Employee> getNoteEmployeeList(String searchKeyword) {
+        QEmployee employee = QEmployee.employee;
+
+        return queryFactory
+                .selectFrom(employee)
+                .where(employee.employeeName.containsIgnoreCase(searchKeyword))
+                .limit(10)
+                .fetch();
+    }
 
     // 2. 현재 로그인한 직원 조회
     @Override

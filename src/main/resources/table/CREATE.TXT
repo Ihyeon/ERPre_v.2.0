@@ -127,42 +127,42 @@ create table m_employee (
 );
 
 -- 9. 쪽지 (발신)
-CREATE TABLE m_message (
-    message_no SERIAL PRIMARY KEY,
-    message_sender_id VARCHAR(50) NOT NULL REFERENCES m_employee (employee_id),
-    message_content TEXT NOT NULL,
-    message_send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    message_update_date TIMESTAMP,
-    message_delete_yn VARCHAR(1) NOT NULL DEFAULT 'N',
-    message_delete_date TIMESTAMP,
-    message_recall_yn VARCHAR(1) NOT NULL DEFAULT 'N',
-    message_recall_date TIMESTAMP
+CREATE TABLE m_note (
+    note_no SERIAL PRIMARY KEY,
+    note_sender_id VARCHAR(50) NOT NULL REFERENCES m_employee (employee_id),
+    note_content TEXT NOT NULL,
+    note_send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    note_update_date TIMESTAMP,
+    note_delete_yn VARCHAR(1) NOT NULL DEFAULT 'N',
+    note_delete_date TIMESTAMP,
+    note_recall_yn VARCHAR(1) NOT NULL DEFAULT 'N',
+    note_recall_date TIMESTAMP
 );
 
--- 10. 쪽지 수신
-CREATE TABLE m_message_recipient (
-    message_no INT NOT NULL REFERENCES m_message (message_no),
-    recipient_id VARCHAR(50) NOT NULL REFERENCES m_employee (employee_id),
-    recipient_read_yn VARCHAR(1) NOT NULL DEFAULT 'N',
-    recipient_read_date TIMESTAMP,
-    recipient_delete_yn VARCHAR(1) NOT NULL DEFAULT 'N',
-    recipient_delete_date TIMESTAMP,
-    bookmarked_yn VARCHAR(1) NOT NULL DEFAULT 'N',
-    PRIMARY KEY (message_no, recipient_id)
+-- 10. 쪽지 (수신)
+CREATE TABLE m_note_receiver (
+    note_no INT NOT NULL REFERENCES m_note(note_no),
+    note_receiver_id VARCHAR(50) NOT NULL REFERENCES m_employee (employee_id),
+    note_receiver_read_yn VARCHAR(1) NOT NULL DEFAULT 'N',
+    note_receiver_read_date TIMESTAMP,
+    note_receiver_delete_yn VARCHAR(1) NOT NULL DEFAULT 'N',
+    note_receiver_delete_date TIMESTAMP,
+    note_receiver_bookmarked_yn VARCHAR(1) NOT NULL DEFAULT 'N',
+    PRIMARY KEY (note_no, note_receiver_id)
 );
 
 -- 11. 쪽지 첨부파일
-CREATE TABLE m_message_file (
-    message_attachment_id SERIAL PRIMARY KEY,
-    message_no INTEGER NOT NULL,
-    message_file_name VARCHAR(255),
-    message_file_url VARCHAR(255) NOT NULL,
-    message_file_size BIGINT,
-    message_file_type VARCHAR(50),
-    message_file_delete_yn VARCHAR(1) NOT NULL DEFAULT 'N',
-    message_file_delete_date TIMESTAMP,
-    CONSTRAINT FK_M_MESSAGE_TO_M_MESSAGE_FILE_1 FOREIGN KEY (message_no)
-    REFERENCES M_MESSAGE (message_no)
+CREATE TABLE m_note_file (
+    note_attachment_id SERIAL PRIMARY KEY,
+    note_no INTEGER NOT NULL,
+    note_file_name VARCHAR(255),
+    note_file_url VARCHAR(255) NOT NULL,
+    note_file_size BIGINT,
+    note_file_type VARCHAR(50),
+    note_file_delete_yn VARCHAR(1) NOT NULL DEFAULT 'N',
+    note_file_delete_date TIMESTAMP,
+    CONSTRAINT FK_M_NOTE_TO_M_NOTE_FILE_1 FOREIGN KEY (note_no)
+    REFERENCES M_NOTE (note_no)
 );
 
 -- 12. 채팅방
@@ -187,7 +187,7 @@ CREATE TABLE m_chat_message (
     chat_send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 15. 채팅 메세지 수신
+-- 15. 채팅 메세지 (수신)
 CREATE TABLE m_chat_message_read (
     chat_message_no INT NOT NULL REFERENCES m_chat_message (chat_message_no),
     chat_message_recipient_id VARCHAR(50) NOT NULL REFERENCES m_employee (employee_id),

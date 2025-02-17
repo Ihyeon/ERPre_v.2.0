@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoteReceiverDTO {
+public class NoteRecipientDTO {
 
     private Long noteNo;
     private String noteReceiverId;

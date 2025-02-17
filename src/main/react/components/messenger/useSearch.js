@@ -46,6 +46,7 @@ const useSearch = (endpoint, searchKeyword = '', status = '', initialParams = {}
     return {
         data,
         isLoading,
+        fetchData,
     };
 };
 

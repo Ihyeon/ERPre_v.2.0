@@ -57,6 +57,7 @@ public class WebSecurityConfig {
                     .disable()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 세션 기반으로 설정
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 📌 세션 사용 안함 (RESTful 방식)
                 .and()
                 .authorizeRequests()
                     .antMatchers("/orderReport", "/employeeAttend", "/employeeSalary").hasAuthority("ROLE_SPECIAL_ACCESS") // 특정 페이지 접근 제한
