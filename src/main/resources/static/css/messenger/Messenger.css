@@ -18,8 +18,8 @@ h3 { color: black; }
 .messenger-header .messenger-close { position: absolute; right: 20px; top: 10px; cursor: pointer; color: rgb(188, 187, 187); font-size: 25px; }
 
 /* 검색창 */
-.search-wrap { margin: 10px 0; padding: 1px 20px 0 19px; display: flex; align-items: center;}
-.messenger-panel .search_box { border-radius: 23px; background-color: #f4f4f478; margin-right: 5px; width: 222px;}
+.search-wrap { margin: 10px 0; padding: 1px 0px 9px 1px; display: flex; align-items: center;}
+.messenger-panel .search_box { border-radius: 23px; background-color: #f4f4f478; margin-right: 5px; width: 290px;}
 .messenger-panel .box { background-color: #f4f4f478; border-radius: 23px; }
 .messenger-panel .search_box.has_text { border-color: black; }
 .messenger-panel .search_box.has_text input { margin-left: 4px; }
@@ -46,6 +46,7 @@ h3 { color: black; }
 
 /* 메신저 조직도*/
 .messenger-content { padding: -1px 30px; overflow-y: auto; height: calc(100% - 120px); color: black; font-size: 16px; overflow-x: hidden; }
+
 .org-tree-root { font-weight: bold; display: flex; align-items: center; }
 .org-status-message { color: rgb(142 141 148); font-size: 14px; margin-left: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; line-height: normal;}
 .org-status-wrap { display: flex; align-items: center; }

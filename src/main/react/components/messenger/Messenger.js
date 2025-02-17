@@ -1,35 +1,19 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import "rc-tree/assets/index.css"
 import {FaComments, FaInfoCircle} from 'react-icons/fa';
 import {BsEnvelope} from "react-icons/bs";
 import {SlOrganization} from "react-icons/sl";
-import {IoChevronDown, IoClose} from "react-icons/io5";
+import {IoClose} from "react-icons/io5";
 import MessengerHome from "./MessengerHome";
 import Info from "./Info";
 import Note from "./Note";
 import Chat from "./Chat";
 import {useMessengerHooks} from "./useMessengerHooks";
+import {string} from "prop-types";
 
-function Messenger({isOpen, toggleMessenger }) {
+function Messenger({ isOpen, toggleMessenger }) {
 
     const {
-
-        // ⭐ 동적 뷰
-        activeView,
-        setActiveView,
-        isLoading,
-
-        // 🟠 쪽지
-        isNewNoteModalOpen,
-        openNewNoteModal,
-        closeNewNoteModal,
-        noteList,
-        setNoteList,
-        isNoteDropdownOpen,
-        setIsNoteDropdownOpen,
-        noteStatus,
-        options,
-        handleNoteStatus,
 
         // 🔴 채팅
         chatList,
@@ -45,9 +29,39 @@ function Messenger({isOpen, toggleMessenger }) {
         setMessengerSearchText,
         handleSearchDel,
         handleMessengerSearchTextChange,
-        formatDate,
 
     } = useMessengerHooks();
+
+    // 활성화된 뷰 관리
+    const [activeView, setActiveView] = useState(() => {
+        const savedView = localStorage.getItem('activeView');
+        return savedView ? savedView : 'home';
+    });
+
+    // 동적 뷰 변경시 localStorage에 저장
+    useEffect(() => {
+        localStorage.setItem('activeView', activeView);
+        console.log('활성화된 뷰', activeView);
+    }, [activeView]);
+
+    // 날짜 변환 함수
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+
+        // 날짜가 유효하지 않으면 기본값 반환
+        if (isNaN(date.getTime())) {
+            return "유효하지 않은 날짜";
+        }
+
+        // 원하는 형식: 일-월-년 시:분
+        const year = String(date.getFullYear()).slice(2);
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+    };
 
     return (
         <div>
@@ -66,47 +80,23 @@ function Messenger({isOpen, toggleMessenger }) {
                     {/* 사이드바 하단*/}
                     <div className="button bottom"></div>
                 </div>
-
-
                         {/* 메신저 헤더 */}
                         <div className={`messenger-header ${activeView === 'info' ? 'info-header' : ''}`}>
                             <h3>
                                 {activeView === 'home' && 'ERPRE'}
                                 {activeView === 'info'}
-                                {activeView === 'note' ? (
-                                    <div className="dropdown-header" onClick={() => setIsNoteDropdownOpen(!isNoteDropdownOpen)}>
-                                        <h3 className="dropdown-title">
-                                            {options.find(opt => opt.value === noteStatus)?.label || '받은 쪽지'}
-                                            <IoChevronDown />
-                                        </h3>
-                                        {isNoteDropdownOpen && (
-                                            <div className="dropdown-content">
-                                                {options.map((option, index) => (
-                                                    <div
-                                                        key={index}
-                                                        onClick={() => handleNoteStatus(option)}
-                                                        className="dropdown-item"
-                                                    >
-                                                        {option.label}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : null}
-
+                                {activeView === 'note' && '쪽지'}
                                 {activeView === 'chat' && '채팅'}
                             </h3>
                                 <IoClose className="messenger-close" title="닫기" onClick={toggleMessenger}/>
                         </div>
 
                         {/* 검색창 */}
-                        {(activeView !== 'info' && activeView !== 'home') && (
+                        {(activeView == 'chat') && (
                             <div className="search-wrap messenger-search">
                                 <div className={`search_box ${messengerSearchText ? 'has_text' : ''}`}>
                                     <label className="label_floating">
-                                        {activeView === 'note' && '이름, 내용' ||
-                                            activeView === 'chat' && '참여자, 채팅방 이름, 메세지 내용'}
+                                        '참여자, 채팅방 이름, 메세지 내용'
                                     </label>
                                     <i className="bi bi-search"></i>
                                     <input
@@ -129,47 +119,23 @@ function Messenger({isOpen, toggleMessenger }) {
                             </div>
                         )}
 
-                {/* 로딩 적용*/}
-                {isLoading ? (
-                    <div className="tr_empty">
-                        <div>
-                            <div className="loading">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <>
+                    {/* 메신저 본문 동적 뷰*/}
+                    {activeView === 'home' && <MessengerHome />}
+                    {activeView === 'info' && <Info />}
+                    {activeView === 'note' &&
+                        <Note formatDate={formatDate} />}
+                    {activeView === 'chat' &&
+                        <Chat
+                            chatList={chatList}
+                            setChatList={setChatList}
+                            fetchChatList={fetchChatList}
+                            formatDate={formatDate}
+                            selectedChat={selectedChat}
+                            isChatModalOpen={isChatModalOpen}
+                            openChatModal={openChatModal}
+                            closeChatModal={closeChatModal}
+                        />}
 
-                        {/* 메신저 본문 동적 뷰*/}
-                        {activeView === 'home' && <MessengerHome />}
-                        {activeView === 'info' &&
-                            <Info />}
-                        {activeView === 'chat' &&
-                            <Chat
-                                chatList={chatList}
-                                setChatList={setChatList}
-                                fetchChatList={fetchChatList}
-                                formatDate={formatDate}
-                                selectedChat={selectedChat}
-                                isChatModalOpen={isChatModalOpen}
-                                openChatModal={openChatModal}
-                                closeChatModal={closeChatModal}
-                            />}
-                        {activeView === 'note' &&
-                            <Note
-                                noteStatus={noteStatus}
-                                noteList={noteList}
-                                setNoteList={setNoteList}
-                                formatDate={formatDate}
-                                isNewNoteModalOpen={isNewNoteModalOpen}
-                                openNewNoteModal={openNewNoteModal}
-                                closeNewNoteModal={closeNewNoteModal}
-                            />}
-                    </>
-                )}
             </div>
         </div>
     );

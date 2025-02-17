@@ -235,4 +235,12 @@ public class EmployeeService {
         return convertToDTO(employee);
     }
 
+    // 쪽지 전송시 자동완성 직원 검색
+    public List<EmployeeDTO> getNoteEmployeeList(String searchKeyword) {
+        List<Employee> employee = employeeRepository.getNoteEmployeeList(searchKeyword);
+        return employee.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
 }

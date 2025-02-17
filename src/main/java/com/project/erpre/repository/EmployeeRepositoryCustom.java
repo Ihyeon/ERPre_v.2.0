@@ -13,6 +13,9 @@ public interface EmployeeRepositoryCustom {
     // 1. 메신저 직원 조회 (검색)
     Page<Employee> getEmployeeList(Pageable pageable, String searchKeyword);
 
+    // 1-1. 쪽지 직원 이름 조회 (자동완성)
+    List<Employee> getNoteEmployeeList(String searchKeyword);
+
     // 2. 현재 로그인한 직원 조회
     Employee getLoginEmployee(String employeeId);
 

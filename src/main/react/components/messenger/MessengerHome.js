@@ -5,20 +5,19 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 import axios from "axios";
 import Select from "react-select";
 import Tree from "rc-tree";
-import {UserContext} from "../../context/UserContext";
 import SockJS from "sockjs-client";
 import {Stomp} from "@stomp/stompjs";
 import MySwal from "sweetalert2";
 import {FaGlobe, FaUserAlt, FaUserAltSlash, FaUserCircle, FaUtensils} from "react-icons/fa";
 import {MdMeetingRoom, MdWork} from "react-icons/md";
 import {PiOfficeChairFill} from "react-icons/pi";
+import {UserContext} from "../../context/UserContext";
 import InfoDetailModal from "./InfoDetailModal";
 import NewNoteModal from "./NewNoteModal";
 import useSearch from "./useSearch";
-import {useMessengerHooks} from "./useMessengerHooks";
 import ChatRoomModal from "./ChatRoomModal";
 
-// MessengerHome.js (Messenger.css)
+// MessengerHome.js (Messenger.css): 메신저 홈 컴포넌트
 // 🟣 유저 상태 관리
 // 🟢 조직도(트리 구조) 렌더링 및 상태 필터링
 // ⚪ 웹소켓을 통한 유저 상태 실시간 업데이트 (온라인 상태 및 상태 메시지)
@@ -335,37 +334,6 @@ const MessengerHome = () => {
         return updateNodeStatus(treeData);
     };
 
-    // ⚪ 웹소켓 구독 연결
-    useEffect(() => {
-        const socket = new SockJS('http://localhost:8787/talk');
-        const stompClient = Stomp.over(socket);
-        stompClientRef.current = stompClient;
-        stompClient.debug = () => {};
-
-        stompClient.connect({}, () => {
-            console.log("WebSocket 연결 성공");
-
-            // 직원 상태 업데이트 구독
-            stompClient.subscribe('/topic/status', (statusResponse) => {
-                const statusUpdate = JSON.parse(statusResponse.body);
-                console.log("웹소켓으로 구독한 직원 상태 업데이트:", statusUpdate);
-                setTreeData((prevData) => updateTreeWithNewStatus(prevData, statusUpdate));
-            });
-
-        }, (error) => {
-            console.log("WebSocket 연결 오류:", error);
-        });
-
-        stompClient.reconnectDelay = 10000;
-        stompClient.activate();
-
-        return () => {
-            stompClient.deactivate()
-                .then(() => console.log("WebSocket 연결 해제 성공"))
-                .catch((error) => console.log("WebSocket 해제 오류", error));
-        };
-    }, []);
-
     // ⚪ 공통 WebSocket 전송 함수
     const sendStatusUpdate = async (updateType, updateData) => {
         try {
@@ -452,6 +420,37 @@ const MessengerHome = () => {
         }
     }, [employeeData]);
 
+    // ⚪ 웹소켓 구독 연결
+    useEffect(() => {
+        const socket = new SockJS('http://localhost:8787/talk');
+        const stompClient = Stomp.over(socket);
+        stompClientRef.current = stompClient;
+        stompClient.debug = () => {};
+
+        stompClient.connect({}, () => {
+            console.log("WebSocket 연결 성공");
+
+            // 직원 상태 업데이트 구독
+            stompClient.subscribe('/topic/status', (statusResponse) => {
+                const statusUpdate = JSON.parse(statusResponse.body);
+                console.log("웹소켓으로 구독한 직원 상태 업데이트:", statusUpdate);
+                setTreeData((prevData) => updateTreeWithNewStatus(prevData, statusUpdate));
+            });
+
+        }, (error) => {
+            console.log("WebSocket 연결 오류:", error);
+        });
+
+        stompClient.reconnectDelay = 10000;
+        stompClient.activate();
+
+        return () => {
+            stompClient.deactivate()
+                .then(() => console.log("WebSocket 연결 해제 성공"))
+                .catch((error) => console.log("WebSocket 해제 오류", error));
+        };
+    }, []);
+
     // 🟡 컨텍스트 메뉴 외부 클릭 감지하여 메뉴 숨기기
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -460,7 +459,6 @@ const MessengerHome = () => {
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
-
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
@@ -469,7 +467,7 @@ const MessengerHome = () => {
     return (
         <div>
         {/* 검색 및 필터 */}
-        <div className="search-wrap search-wrap">
+        <div className="search-wrap">
             <div className={`search_box ${searchKeyword ? 'has_text' : ''}`}>
                 <label className="label_floating">
                     이름, 부서, 직급

@@ -20,7 +20,7 @@ const ReceivedNoteModal = ({ note, onClose, handleBookmark, deleteNote }) => {
     //     }
     // }, [note]);
 
-    const cleanHTML = DOMPurify.sanitize(note.messageContent);
+    const cleanHTML = DOMPurify.sanitize(note.noteContent);
 
     // 삭제 경고창 및 요청
     const showDeleteAlert = () => {
@@ -34,7 +34,7 @@ const ReceivedNoteModal = ({ note, onClose, handleBookmark, deleteNote }) => {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteNote(null, note.messageNo);
+                deleteNote(null, note.noteNo);
             }
         });
     };
@@ -63,7 +63,7 @@ const ReceivedNoteModal = ({ note, onClose, handleBookmark, deleteNote }) => {
                     <div className="note-actions">
                         <button
                             className="note-action-button del"
-                            onClick={() => deleteNote(null, note?.messageNo)} // deleteNote 호출
+                            onClick={() => deleteNote(null, note?.noteNo)} // deleteNote 호출
                         >
                             <FaTrashAlt/>
                         </button>
@@ -73,7 +73,7 @@ const ReceivedNoteModal = ({ note, onClose, handleBookmark, deleteNote }) => {
                                 e.stopPropagation();
                                 handleBookmark(note); // 전달된 handleBookmark 사용
                             }}>
-                            {note.bookmarkedYn === 'Y' ? (
+                            {note.noteReceiverBookmarkedYn === 'Y' ? (
                                 <FaStar className="star-icon active"/>
                             ) : (
                                 <FaStar className="star-icon"/>
@@ -87,7 +87,7 @@ const ReceivedNoteModal = ({ note, onClose, handleBookmark, deleteNote }) => {
                         </button>
                     </div>
                     <div className="received-date">
-                        {formatDate(note.messageSendDate)}
+                        {formatDate(note.noteSendDate)}
                     </div>
                 </div>
 

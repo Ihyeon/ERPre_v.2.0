@@ -111,14 +111,13 @@ public class MessengerController {
     @GetMapping("/note/list")
     public ResponseEntity<List<NoteDTO>> getNoteList(
             @RequestParam(required = false) String searchKeyword,
-            @RequestParam String noteStatus
+            @RequestParam String status
     ) {
-        logger.info("getNoteList API 호출됨 - searchKeyword: {}, status: {}", searchKeyword, noteStatus);
+        logger.info("getNoteList API 호출됨 - searchKeyword: {}, status: {}", searchKeyword, status);
         try {
-            List<NoteDTO> notes = messengerService.getNoteListByUser(searchKeyword, noteStatus);
+            List<NoteDTO> notes = messengerService.getNoteListByUser(searchKeyword, status);
             return ResponseEntity.ok(notes);
-
-
+            
         } catch (Exception e) {
             logger.error("쪽지 목록 조회 중 오류 발생", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -162,7 +161,21 @@ public class MessengerController {
         return ResponseEntity.noContent().build();
     }
 
-    // 실시간 알림 전송
+    // 쪽지 전송시 자동완성 직원 검색
+    @GetMapping("/note/employeeList")
+    public ResponseEntity<List<EmployeeDTO>> getNoteEmployeeList (
+            @RequestParam(required = false) String searchKeyword
+    ) {
+        try {
+            List<EmployeeDTO> employees = employeeService.getNoteEmployeeList(searchKeyword);
+            return ResponseEntity.ok(employees);
+        } catch (Exception e) {
+            logger.error("직원 자동완성 검색 중 오류 발생: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    // 실시간 쪽지 전송
     @PostMapping("/note/send")
     public ResponseEntity<?> sendNote(
             @RequestParam(required = false) List<String> receiverIds,
