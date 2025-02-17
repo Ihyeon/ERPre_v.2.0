@@ -102,6 +102,7 @@ const Note = ({ formatDate }) => {
                                                 {option.label}
                                             </div>))}
                                     </div>
+
                                 )}
                         </div>
                         <button className="new-note-button" onClick={openNewNoteModal} aria-label="새로운 쪽지">

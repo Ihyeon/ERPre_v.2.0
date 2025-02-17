@@ -13,6 +13,7 @@ export const useMessengerHooks = () => {
     const openNewNoteModal = () => { setNewNoteModalOpen(true); };
     const closeNewNoteModal = () => { setNewNoteModalOpen(false); };
 
+
     // 채팅 목록 state
     const [chatList, setChatList] = useState([]);
 
