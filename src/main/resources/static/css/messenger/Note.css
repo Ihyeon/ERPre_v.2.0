@@ -20,19 +20,20 @@
 /* 드롭 메뉴 & 아이콘 */
 .note-list-header { padding: 3px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: flex-end; }
 .new-note-button, .delete-note-button { margin-left: 10px; background: none; border: none; font-size: 21px; cursor: pointer; color: #a2a2a2; }
-.note-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ddd; margin-bottom: 10px; }
+.note-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ddd; }
 .note-header h3 { font-size: 18px; font-weight: bold; }
 .note-search input { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd; font-size: 14px; outline: none; }
+
 .dropdown-header { position: relative; cursor: pointer;  display: flex;  align-items: center; }
 .dropdown-title { display: flex; align-items: center; font-size: 23px; }
 .dropdown-content { position: absolute; top: 40px; left: 0; background-color: white; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-radius: 4px; margin-top: 5px; z-index: 10; width: 150px; overflow: hidden; font-size: 26px; }
-
 .dropdown-item { padding: 5px 7px; cursor: pointer; font-size: 22px; color: #333; transition: background-color 0.2s ease; }
 .dropdown-item:hover { background-color: #f0f0f0; }
 .dropdown-item:active { background-color: #e0e0e0; }
-
 .dropdown-header .dropdown-title svg { transition: transform 0.3s; margin-left: 5px; font-size: 23px; }
 .dropdown-header:hover .dropdown-title svg { transform: rotate(180deg); }
+
+.note-header-icon {  }
 
 /* 본문 */
 .note-list { list-style: none; margin: 0; padding: 0; overflow-y: auto;}

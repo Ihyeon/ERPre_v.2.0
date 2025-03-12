@@ -151,15 +151,31 @@ public class MessengerService {
 
     // 상태에 따른 쪽지 목록 조회 및 검색
     public List<NoteDTO> getNoteListByUser(String searchKeyword, String noteStatus) {
-        logger.error("쪽지 목록 서비스 층에서 조회 중 로그 오류 발생");
+        logger.info("쪽지 목록 조회 시작 - employeeId: {}, searchKeyword: {}, noteStatus: {}",
+                getEmployeeIdFromAuthentication(), searchKeyword, noteStatus);
         String employeeId = getEmployeeIdFromAuthentication();
         return noteRepository.getNoteListByUser(employeeId, searchKeyword, noteStatus);
     }
 
-    // 쪽지 상세 정보 조회 및 읽음 여부 업데이트
+    // 쪽지 상세 정보 조회 및 읽음 상태 업데이트
     @Transactional
     public NoteDTO getNoteByNo(Long noteNo) {
         String employeeId = getEmployeeIdFromAuthentication();
+
+        NoteReceiverId noteReceiverId = new NoteReceiverId();
+        noteReceiverId.setNoteNo(noteNo);
+        noteReceiverId.setNoteReceiverId(employeeId);
+        
+        NoteReceiver noteReceiver = noteReceiverRepository.findById(noteReceiverId)
+                .orElseThrow(() -> new NoSuchElementException("해당 쪽지를 찾을 수 없습니다."));
+        
+        // 읽음 상태 업데이트
+        if(!"Y".equals(noteReceiver.getNoteReceiverReadYn())) {
+            noteReceiver.setNoteReceiverReadYn("Y");
+            noteReceiver.setNoteReceiverReadDate(LocalDateTime.now());
+            noteReceiverRepository.save(noteReceiver);
+        }
+
         return noteRepository.getNoteByNo(noteNo, employeeId);
     }
 
@@ -167,7 +183,7 @@ public class MessengerService {
     public void updateBookmark(Long noteNo) {
         String employeeId = getEmployeeIdFromAuthentication();
 
-        // 사용자 아이디와 메시지 넘버로 수신자 테이블에서 행 조회하고 해당 북마크 여부를 'Y'로 업데이트 후 저장하기
+        // 사용자 아이디와 메시지 넘버로 수신자 테이블에서 행 조회
         NoteReceiverId noteReceiverId = new NoteReceiverId();
         noteReceiverId.setNoteNo(noteNo);
         noteReceiverId.setNoteReceiverId(employeeId);
@@ -175,7 +191,8 @@ public class MessengerService {
         NoteReceiver noteReceiver = noteReceiverRepository.findById(noteReceiverId)
                 .orElseThrow(() -> new NoSuchElementException("해당 쪽지를 찾을 수 없습니다."));
 
-        noteReceiver.setNoteReceiverBookmarkedYn("Y");
+        // 북마크 업데이트
+        noteReceiver.setNoteReceiverBookmarkedYn(noteReceiver.getNoteReceiverBookmarkedYn().equals("Y") ? "N" : "Y");
         noteReceiverRepository.save(noteReceiver);
     }
 
@@ -208,7 +225,11 @@ public class MessengerService {
 
     // 새 쪽지 생성
     @Transactional
-    public NoteDTO createNote(String senderId, String noteContent, Optional<LocalDateTime> scheduledDate, List<String> noteReceiverIds) {
+    public NoteDTO createNote(
+            String senderId,
+            String noteContent,
+            Optional<LocalDateTime> scheduledDate,
+            List<String> noteReceiverIds) {
 
         // 발신자 조회
         Employee sender = employeeRepository.findById(senderId)
@@ -282,9 +303,9 @@ public class MessengerService {
                 throw new IllegalArgumentException("현재 쪽지 상태를 알 수 없습니다: " + noteStatus);
         }
 
-        // Message 테이블의 쪽지를 완전 삭제하기 위한 조건 확인 및 삭제
-        List<Note> messagesToCheck = noteRepository.findAllByNoteDeleteYn("Y");
-        for (Note note : messagesToCheck) {
+        // Note 테이블의 쪽지를 완전 삭제하기 위한 조건 확인 및 삭제
+        List<Note> notesToCheck = noteRepository.findAllByNoteDeleteYn("Y");
+        for (Note note : notesToCheck) {
             boolean allReceiversDeleted = noteReceiverRepository
                     .countByNoteNoteNoAndReceiverDeleteYn(note.getNoteNo(), "N") == 0;
 

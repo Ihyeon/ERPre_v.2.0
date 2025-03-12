@@ -22,13 +22,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/talk")
-                .setAllowedOriginPatterns("*")
-                .setHandshakeHandler(new DefaultHandshakeHandler() {
+                .setAllowedOriginPatterns("*") // CORS 허용
+//                .setHandshakeHandler(new DefaultHandshakeHandler() {
+//                    @Override
+//                    protected Principal determineUser(@NonNull ServerHttpRequest request, @NonNull WebSocketHandler wsHandler, @NonNull Map<String, Object> attributes) {
+//                        return null; // 모든 사용자가 접근 가능하도록 null 반환
+//                    }
+//                })
+                .setHandshakeHandler(new DefaultHandshakeHandler() { // WebSocket 인증 핸들러
                     @Override
                     protected Principal determineUser(@NonNull ServerHttpRequest request,
                                                       @NonNull WebSocketHandler wsHandler,
                                                       @NonNull Map<String, Object> attributes) {
-//                        return null;
                         Principal principal = request.getPrincipal();
                         if (principal != null) {
                             System.out.println("WebSocket 연결된 사용자: " + principal.getName());
@@ -38,7 +43,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         return principal;
                     }
                 })
-                .addInterceptors(new HttpSessionHandshakeInterceptor())
+                .addInterceptors(new HttpSessionHandshakeInterceptor()) // 세션 정보 전달
                 .withSockJS();
     }
 

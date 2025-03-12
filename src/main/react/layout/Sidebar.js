@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import '../../resources/static/css/common/Sidebar.css';
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
+import {UserContext} from "../context/UserContext";
 
 function Sidebar({ currentMenu }) {
+
+    const { user } = useContext(UserContext);
+
     const [activeSubMenu, setActiveSubMenu] = useState(() => {
         const path = window.location.pathname;
         return path.split('/').pop();
     });
-    const [employee, setEmployee] = useState(null);
     const location = useLocation();
 
     const [expandedMenu, setExpandedMenu] = useState(() => {
@@ -23,32 +26,12 @@ function Sidebar({ currentMenu }) {
         try {
             await axios.put('/api/messengers/info/update', {
                 employeeStatus: employeeStatus
-            });
+            })
+            console.log('직원 상태 업데이트 완료', employeeStatus)
         } catch (error) {
             console.error('직원 상태를 업데이트 하는 데 오류 발생', error);
         }
     };
-
-    useEffect(() => {
-        const fetchEmployee = async () => {
-            try {
-                const response = await axios.get('/api/employee', {
-                    withCredentials: true
-                });
-
-                if (response.status === 200) {
-                    const data = response.data;
-                    console.log('직원 데이터:', response.data);
-                    setEmployee(data);
-                } else {
-                    console.error('사용자 정보를 가져오는데 실패했습니다.');
-                }
-            } catch (error) {
-                console.error('사용자 정보를 가져오는 중 오류 발생:', error);
-            }
-        };
-        fetchEmployee();
-    }, []);
 
     useEffect(() => {
         if (location.pathname === '/main') {
@@ -108,19 +91,16 @@ function Sidebar({ currentMenu }) {
             <div className="sidebar-top">
                 <div className="user-info">
                     <div className="user-name">
-                        {employee ? (
+                        {user ? (
                             <>
-                                {employee.jobName === 'Admin' ? '관리자' : ''}
-                                {employee.employeeName}{" "}{employee.jobName}{" "}({employee.departmentName})
+                                {user.employeeName}{" "}{user.jobName}{" "}({user.departmentName})
                             </>
                         ) : (
                             'LOADING'
                         )}
                     </div>
                     <div className="login-time">
-                        {employee?.employeeStatusUpdateTime
-                            ? formatDate(employee.employeeStatusUpdateTime)
-                            : '시간 정보 없음'}
+                        {formatDate(new Date())}
                     </div>
                     <button onClick={handleLogout} className="box small">로그아웃</button>
                 </div>
@@ -141,7 +121,7 @@ function Sidebar({ currentMenu }) {
                             <li className={currentMenu === 'orderList' ? 'active' : ''}>
                                 <a href="#" onClick={() => handleSubMenuClick('orderList', '/orderList')}>주문 목록</a>
                             </li>
-                            {employee && employee.jobId >= 1 && employee.jobId <= 4 && (
+                            {user && user.jobId >= 1 && user.jobId <= 4 && (
                                 <li className={currentMenu === 'orderReport' ? 'active' : ''}>
                                     <a href="#" onClick={() => handleSubMenuClick('orderReport', '/orderReport')}>주문 현황 보고서</a>
                                 </li>
@@ -200,7 +180,7 @@ function Sidebar({ currentMenu }) {
                             <li className={currentMenu === 'employeeList' ? 'active' : ''}>
                                 <a href="#" onClick={() => handleSubMenuClick('employeeList', '/employeeList')}>직원 관리</a>
                             </li>
-                            {employee && employee.jobId >= 1 && employee.jobId <= 4 && (
+                            {user && user.jobId >= 1 && user.jobId <= 4 && (
                                 <>
                                     <li className={currentMenu === 'employeeAttend' ? 'active' : ''}>
                                         <a href="#" onClick={() => handleSubMenuClick('employeeAttend', '/employeeAttend')}>근태 관리</a>

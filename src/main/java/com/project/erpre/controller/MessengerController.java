@@ -117,42 +117,41 @@ public class MessengerController {
         try {
             List<NoteDTO> notes = messengerService.getNoteListByUser(searchKeyword, status);
             return ResponseEntity.ok(notes);
-            
         } catch (Exception e) {
             logger.error("쪽지 목록 조회 중 오류 발생", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    // 쪽지 상세 정보 조회 및 읽음 여부 업데이트 API
-    @PutMapping("/note/{messageNo}")
-    public ResponseEntity<NoteDTO> getNoteByNo(@PathVariable Long messageNo) {
-        NoteDTO messageDetail = messengerService.getNoteByNo(messageNo);
-        return ResponseEntity.ok(messageDetail);
+    // 쪽지 상세 정보 조회 및 읽음 상태 업데이트 API
+    @PutMapping("/note/{noteNo}")
+    public ResponseEntity<NoteDTO> getNoteByNo(@PathVariable Long noteNo) {
+        NoteDTO noteDetail = messengerService.getNoteByNo(noteNo);
+        return ResponseEntity.ok(noteDetail);
     }
 
-    // 쪽지 북마크 상태 변경 API
-    @PutMapping("/note/{messageNo}/bookmark")
-    public ResponseEntity<Void> updateBookmark(@PathVariable Long messageNo) {
-        messengerService.updateBookmark(messageNo);
+    // 쪽지 북마크 상태 업데이트 API
+    @PutMapping("/note/{noteNo}/bookmark")
+    public ResponseEntity<Void> updateBookmark(@PathVariable Long noteNo) {
+        messengerService.updateBookmark(noteNo);
         return ResponseEntity.ok().build();
     }
 
     // 쪽지 회수 API
-    @PutMapping("/note/recall/{messageNo}")
-    public ResponseEntity<Void> recallNote(@PathVariable Long messageNo) {
-        messengerService.recallNote(messageNo);
+    @PutMapping("/note/recall/{noteNo}")
+    public ResponseEntity<Void> recallNote(@PathVariable Long noteNo) {
+        messengerService.recallNote(noteNo);
         return ResponseEntity.noContent().build();
     }
 
     // (상태/전체/개별) 쪽지 삭제 API
     @PutMapping("/note/delete")
     public ResponseEntity<Void> deleteNote(
-            @RequestParam(value = "messageNo", required = false) Long messageNo,
-            @RequestParam(value = "noteStatus", required = false) String noteStatus
+            @RequestParam(value = "noteNo", required = false) Long noteNo,
+            @RequestParam(value = "noteStatus", required = false, defaultValue = "received") String noteStatus
     ) {
-        if (messageNo != null) {
-            messengerService.deleteNoteById(messageNo); // 개별 삭제
+        if (noteNo != null) {
+            messengerService.deleteNoteById(noteNo); // 개별 삭제
         } else if (noteStatus != null) {
             messengerService.deleteAllNotes(noteStatus); // 상태에 따른 전체 삭제
         } else {
@@ -174,40 +173,6 @@ public class MessengerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-    // 실시간 쪽지 전송
-    @PostMapping("/note/send")
-    public ResponseEntity<?> sendNote(
-            @RequestParam(required = false) List<String> receiverIds,
-            @RequestParam String messageContent
-    ) {
-        System.out.println("수신자아이디:" + receiverIds + ", 수신내용:" + messageContent);
-
-        messengerService.sendNote(receiverIds, messageContent);
-        return ResponseEntity.ok("쪽지가 전송되었습니다");
-    }
-    
-//    // 실시간 알림 구독
-//    @GetMapping(value = "/note/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//    public SseEmitter noteSubscribe() {
-//        SseEmitter emitter = new SseEmitter();
-//
-//        try {
-//            // SseEmitter에 초기 연결 이벤트를 전송
-//            emitter.send(SseEmitter.event().name("INIT"));
-//
-////             서비스 계층에서 쪽지 전송 로직을 통해 알림 발생 시 emitter를 사용하여 전송
-////             emitter.send(SseEmitter.event().name("NEW_NOTE").data(newNoteData));
-//
-//            // 예외 처리 및 타임아웃 설정
-//            emitter.onCompletion(() -> logger.info("SSE 연결 완료"));
-//            emitter.onTimeout(() -> logger.info("SSE 연결 타임아웃"));
-//        } catch (Exception e) {
-//            logger.error("SSE 구독 중 오류 발생", e);
-//        }
-//
-//        return emitter;
-//    }
 
 
     /////////////////////////////////////////////////////////////////////// 🔴 채팅

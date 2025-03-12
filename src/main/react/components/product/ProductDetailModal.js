@@ -31,7 +31,7 @@ function ProductDetailModal({ productCd, onClose }) { // 파라미터 구조 분
     };
 
     return (
-        <div className="modal_overlay" onMouseDown={handleBackgroundClick}>
+        <div className="modal_overlay" onMouseDown={handleBackgroundClick} style={{width: '640px'}}>
             <div className="modal_container search">
                 <div className="header">
                     <div>상품 납품 내역</div>
