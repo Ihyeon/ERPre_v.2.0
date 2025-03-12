@@ -8,11 +8,10 @@ import ConfirmCustom from '../components/common/ConfirmCustom'; // confirm 모�
 import {useLocation} from 'react-router-dom';
 import EmailSidebar from './EmailSidebar';
 import {MessengerProvider} from "../context/MessengerContext";
-import {UserContext, UserProvider} from '../context/UserContext';
+import {UserProvider} from '../context/UserContext';
 
 
 function Layout({currentMenu, children}) {
-    const { user, setUser } = useContext(UserContext) || {};
     //
     // if (!user) {
     //     return <div>Loading...</div>; // 유저 데이터 로딩 중에 표시할 내용
@@ -20,30 +19,23 @@ function Layout({currentMenu, children}) {
 
     const location = useLocation();
 
-    return (
-        <UserProvider>
+    return (<UserProvider>
             <MessengerProvider>
-        <div className="container">
+                    <div className="container">
 
-                    <Header/>
-                    <div className="main-container">
-                        {location.pathname === "/email" ||
-                        location.pathname === "/receivedMail" ||
-                        location.pathname === "/sentMail" ||
-                        location.pathname === "/draftMailBox" ||
-                        location.pathname === "/emailViewer" ||
-                        location.pathname === "/trashMailBox" ?
-                            <EmailSidebar currentMenu={currentMenu}/> :
-                            <Sidebar currentMenu={currentMenu}/>}
+                        <Header/>
+                        <div className="main-container">
+                            {location.pathname === "/email" || location.pathname === "/receivedMail" || location.pathname === "/sentMail" || location.pathname === "/draftMailBox" || location.pathname === "/emailViewer" || location.pathname === "/trashMailBox" ?
+                                <EmailSidebar currentMenu={currentMenu}/> : <Sidebar currentMenu={currentMenu}/>}
 
-                        {children}
-                        <Toast/> {/* Toast 메세지 */}
-                        <ConfirmCustom/> {/* confirm 모달 */}
+                            {children}
+                            <Toast/> {/* Toast 메세지 */}
+                            <ConfirmCustom/> {/* confirm 모달 */}
 
+                        </div>
                     </div>
-        </div>
             </MessengerProvider>
-        </UserProvider>
-    )
+        </UserProvider>)
 }
+
 export default Layout;

@@ -9,16 +9,16 @@ import { Client as StompClient } from '@stomp/stompjs';
 import { UserContext } from "../../context/UserContext";
 import UseSearch from "./useSearch";
 import EmployeeSearchModal from "./EmployeeSearchModal";
-import axios from "axios";
 
 // NewNoteModal.js (Note.css): 쪽지 전송 모달 컴포넌트
 // 쪽지 작성 및 전송
 // 파일 첨부 (로컬 저장소에 저장, 추후 클라우드 스토리지로 확장 가능)
-// 예약 전송 및 수신자 선택 (추후 이름 입력시 자동완성 되는 기능 확장 가능)
+// 예약 전송 및 수신자 선택 (이름 입력시 자동완성)
 // ReactQuill 에디터 커스터마이징 (CustomToolbar 사용)
 const NewNoteModal = ({ closeNewNoteModal }) => {
 
-    const { user, setUser } = useContext(UserContext); // 사용자 정보 
+    // 전역 변수 관리
+    const { user, stompClientRef } = useContext(UserContext);
 
     const [receivers, setReceivers] = useState([]); // 선택된 수신 직원 목록
     const [noteContent, setNoteContent] = useState(""); // 발신 메세지
@@ -29,7 +29,6 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
     const [isAutocompleteVisible, setAutocompleteVisible] = useState(false); // 자동완성 목록 상태
     const [selectedIndex, setSelectedIndex] = useState(-1); // 자동완성 목록에서 현재 선택된 인덱스
     const [isEmployeeSearchModalOpen, setEmployeeSearchModalOpen] = useState(false); // 직원 검색 모달 상태
-    const stompClientRef = useRef(null); // WebSocket 클라이언트 참조
     const quillRef = useRef(null); // ReactQuill 참조
     const autocompleteRef = useRef(null); // 자동완성 목록 참조
     const inputRef = useRef(null); // 입력 필드 참조
@@ -178,7 +177,7 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
                 });
                 console.log("전송된 쪽지:", newNote);
             } else {
-                console.error("쪽지 WebSocket 연결이 설정되지 않았습니다.");
+                console.error("쪽지 WebSocket 연결 실패");
             }
             closeNewNoteModal();
 
@@ -187,27 +186,27 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
         }
     };
 
-    // 웹소켓 연결
-    useEffect(() => {
-        const socket = new SockJS('http://localhost:8787/talk');
-
-        stompClientRef.current = new StompClient({
-            webSocketFactory: () => socket,
-            reconnectDelay: 10000,
-            onConnect: () => {
-                console.log("쪽지 전송 WebSocket 연결 성공");
-            },
-            onDisconnect: () => console.log("쪽지 WebSocket 연결이 닫혔습니다."),
-        });
-
-        stompClientRef.current.activate();
-
-        return () => {
-            stompClientRef.current.deactivate()
-                .then(() => console.log("쪽지 WebSocket 연결이 성공적으로 해제되었습니다."))
-                .catch((error) => console.error("WebSocket 해제 중 오류:", error));
-        };
-    }, []);
+    // // 웹소켓 연결
+    // useEffect(() => {
+    //     const socket = new SockJS('http://localhost:8787/talk');
+    //
+    //     stompClientRef.current = new StompClient({
+    //         webSocketFactory: () => socket,
+    //         reconnectDelay: 10000,
+    //         onConnect: () => {
+    //             console.log("쪽지 전송 WebSocket 연결 성공");
+    //         },
+    //         onDisconnect: () => console.log("쪽지 WebSocket 연결이 닫혔습니다."),
+    //     });
+    //
+    //     stompClientRef.current.activate();
+    //
+    //     return () => {
+    //         stompClientRef.current.deactivate()
+    //             .then(() => console.log("쪽지 WebSocket 연결이 성공적으로 해제되었습니다."))
+    //             .catch((error) => console.error("WebSocket 해제 중 오류:", error));
+    //     };
+    // }, []);
 
     // Quill 모듈 설정
     const quillModules = useMemo(() => {

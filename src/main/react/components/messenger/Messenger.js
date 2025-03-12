@@ -8,7 +8,7 @@ import MessengerHome from "./MessengerHome";
 import Info from "./Info";
 import Note from "./Note";
 import Chat from "./Chat";
-import {useMessengerHooks} from "./useMessengerHooks";
+import {useMessengerHomeHooks} from "./useMessengerHomeHooks";
 import {string} from "prop-types";
 
 function Messenger({ isOpen, toggleMessenger }) {
@@ -30,7 +30,7 @@ function Messenger({ isOpen, toggleMessenger }) {
         handleSearchDel,
         handleMessengerSearchTextChange,
 
-    } = useMessengerHooks();
+    } = useMessengerHomeHooks();
 
     // 활성화된 뷰 관리
     const [activeView, setActiveView] = useState(() => {
@@ -41,7 +41,7 @@ function Messenger({ isOpen, toggleMessenger }) {
     // 동적 뷰 변경시 localStorage에 저장
     useEffect(() => {
         localStorage.setItem('activeView', activeView);
-        console.log('활성화된 뷰', activeView);
+        // console.log('활성화된 뷰', activeView);
     }, [activeView]);
 
     // 날짜 변환 함수

@@ -34,7 +34,7 @@ export const useNoteHooks = () => {
         const newStatus = option?.value || 'received';
         setNoteStatus(newStatus);
         setIsNoteDropdownOpen(false);
-        console.log("현재 노트 상태", newStatus);
+        console.log("변경된 노트 상태", newStatus);
     };
 
     // 🟠 공통 검색 훅: 검색 키워드 및 상태 기반으로 쪽지 데이터 가져오기
@@ -42,6 +42,7 @@ export const useNoteHooks = () => {
 
     // 🟠 쪽지 내용을 요약해서 표시하는 함수
     const getPreviewContent = (htmlContent) => {
+
         const parser = new DOMParser(); // 문자열 HTML을 파싱할 DOMParser 생성
         const doc = parser.parseFromString(htmlContent, "text/html"); // HTML 문자열을 DOM 객체로 변환
         const imgTags = doc.getElementsByTagName("img"); // DOM에서 모든 <img> 태그 추출
@@ -60,12 +61,21 @@ export const useNoteHooks = () => {
         }
     };
 
-    // 🟠 쪽지 상세 조회 열기
+    // 🟠 쪽지 상세 조회 열기 (읽음 상태 업데이트)
     const handleOpenNote = async (note) => {
         try {
             const response = await axios.put(`/api/messengers/note/${note.noteNo}`);
             setNoteDetail(response.data);
             console.log('쪽지 상세 조회 데이터:', response.data);
+
+            // 🟠 읽음 상태를 UI에 즉시 반영
+            setNoteList((prevNotes) =>
+                prevNotes.map((n) =>
+                    n.noteNo === note.noteNo ? { ...n, noteReceiverReadYn: "Y" } : n
+                )
+            );
+
+            await fetchData();
         } catch (error) {
             console.error("쪽지 상세 조회 중 오류 발생:", error);
         }
@@ -113,6 +123,16 @@ export const useNoteHooks = () => {
     const handleBookmark = async (note) => {
         try {
             await axios.put(`/api/messengers/note/${note.noteNo}/bookmark`);
+
+            // UI 즉시 업데이트 (북마크 토글)
+            setNoteList((prevNotes) =>
+                prevNotes.map((n) =>
+                    n.noteNo === note.noteNo
+                        ? { ...n, noteReceiverBookmarkedYn: n.noteReceiverBookmarkedYn === "Y" ? "N" : "Y" }
+                        : n
+                )
+            );
+            await fetchData();
         } catch (error) {
             console.error("북마크 업데이트 중 오류:", error);
         }
@@ -160,17 +180,17 @@ export const useNoteHooks = () => {
     };
 
     // 🟠 쪽지 삭제 함수
-    const deleteNote = async (noteStatus = null, noteNo = null) => {
+    const deleteNote = async (noteStatus = noteStatus, noteNo = null) => {
         try {
-            setNoteList((prev) =>
-                noteNo ? prev.filter((note) => note.noteNo !== noteNo) : []
-            );
             await axios.put(`/api/messengers/note/delete`, null, {
                 params: {
                     ...(noteStatus && { noteStatus }), // 전체 쪽지 삭제
                     ...(noteNo && { noteNo }) // 특정 쪽지 삭제인 경우
                 }
             });
+            setNoteList((prev) =>
+                noteNo ? prev.filter((note) => note.noteNo !== noteNo) : []
+            );
         } catch (error) {
             console.error('쪽지 삭제 중 오류 발생:', error);
         }
@@ -178,25 +198,33 @@ export const useNoteHooks = () => {
 
     // 🟠 개별 쪽지 삭제 경고창
     const showDeleteAlert = (note) => {
-        Swal.fire({
-            title: `쪽지 삭제`,
-            html: '해당 쪽지를 정말 삭제하시겠습니까?<br/>삭제된 쪽지는 복구할 수 없습니다.<br/>※ 나에게 보낸 쪽지인 경우, 받은 쪽지함과 보낸 쪽지함에서 모두 삭제됩니다.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: '삭제',
-            cancelButtonText: '취소',
-            reverseButtons: true,
-        }).then(async (result) => { // `async`로 수정
-            if (result.isConfirmed) {
-                try {
-                    console.log("쪽지 삭제 성공", note.noteNo);
-                    await deleteNote(null, note.noteNo); // 개별 삭제
-                    window.showToast("쪽지가 삭제되었습니다");
-                } catch (error) {
-                    console.error("쪽지 삭제 실패", error);
-                    window.showToast("쪽지 삭제 중 오류가 발생했습니다");
+        return new Promise((resolve) => {
+            Swal.fire({
+                title: `쪽지 삭제`,
+                html: '해당 쪽지를 정말 삭제하시겠습니까?<br/>삭제된 쪽지는 복구할 수 없습니다.<br/>※ 나에게 보낸 쪽지인 경우, 받은 쪽지함과 보낸 쪽지함에서 모두 삭제됩니다.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소',
+                reverseButtons: true,
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        console.log("삭제 전 noteList:", noteList);
+                        await deleteNote(noteStatus, note.noteNo); // 개별 삭제
+                        setNoteList((prev) => prev.filter((n) => n.noteNo !== note.noteNo));
+                        const updateNotes = await fetchData() || [];
+                        setNoteList(updateNotes);
+                        console.log("삭제 후 noteList:", updateNotes);
+                        window.showToast("쪽지가 삭제되었습니다");
+                    } catch (error) {
+                        console.error("쪽지 삭제 실패", error);
+                        window.showToast("쪽지 삭제 중 오류가 발생했습니다");
+                        setNoteList((prev) => prev || []);
+                    }
                 }
-            }
+                resolve(); // Promise 해결 (성공 또는 취소 시)
+            });
         });
     };
 
@@ -214,8 +242,11 @@ export const useNoteHooks = () => {
             if (result.isConfirmed) {
                 try {
                     console.log("쪽지 삭제 성공");
-                    await deleteNote(noteStatus); // 개별 삭제
-                    window.showToast("쪽지가 삭제되었습니다");
+                    await deleteNote(noteStatus);
+                    const updateNotes = await fetchData() || [];
+                    setNoteList(updateNotes);
+                    window.showToast("쪽지가 삭제되었습니다"
+                    );
                 } catch (error) {
                     console.error("쪽지 삭제 실패", error);
                     window.showToast("쪽지 삭제 중 오류가 발생했습니다");
@@ -223,6 +254,10 @@ export const useNoteHooks = () => {
             }
         });
     };
+
+    useEffect(() => {
+        console.log("현재 노트 상태", noteStatus);
+    }, []);
 
     // 🟡 컨텍스트 메뉴 외부 클릭 감지하여 메뉴 숨기기
     useEffect(() => {
@@ -243,7 +278,7 @@ export const useNoteHooks = () => {
 
     // 🟠 서버 데이터와 로컬 쪽지 목록 동기화
     useEffect(() => {
-        setNoteList(fetchNoteList);
+        setNoteList(fetchNoteList || []);
         console.log('조회한 쪽지 목록', fetchNoteList);
     }, [fetchNoteList]);
 
@@ -252,6 +287,7 @@ export const useNoteHooks = () => {
         // 🟠 쪽지 상태 관리
         isLoading,
         noteList,
+        setNoteList,
         searchKeyword,
         setSearchKeyword,
         noteStatus,
@@ -261,14 +297,17 @@ export const useNoteHooks = () => {
         handleNoteStatus,
         getPreviewContent,
         noteDetail,
+        setNoteDetail,
         handleOpenNote,
         handleCloseNote,
         deleteNote,
+        showDeleteAlert,
         showDeleteAllAlert,
         handleBookmark,
         isNewNoteModalOpen,
         openNewNoteModal,
         closeNewNoteModal,
+        fetchData,
 
         // 🟡 우클릭 메뉴 관리
         contextMenu,

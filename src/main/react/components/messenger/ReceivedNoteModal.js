@@ -5,39 +5,24 @@ import { UserContext } from "../../context/UserContext";
 import {FaReply, FaStar, FaTrashAlt} from "react-icons/fa";
 import Swal from "sweetalert2";
 import NewNoteModal from "./NewNoteModal";
+import {useNoteHooks} from "./useNoteHooks";
 
-const ReceivedNoteModal = ({ note, onClose, handleBookmark, deleteNote }) => {
+const ReceivedNoteModal = ({ note, onClose }) => {
+
     if (!note) return null;
 
-    // const [selectedNoteNo, setSelectedNoteNo] = useState('');
     const { user } = useContext(UserContext);
+
+    const {
+        showDeleteAlert,
+        handleBookmark,
+    } = useNoteHooks();
+
+
     const [replyModalOpen, setReplyModalOpen] = useState(false);
-    console.log("ReceivedNoteModal 열린 쪽지:", note); // 확인용 로그
-    //
-    // useEffect(() => {
-    //     if (note && note.messageNo) {
-    //         setSelectedNoteNo(note.messageNo);
-    //     }
-    // }, [note]);
+    console.log("받은 쪽지:", note);
 
     const cleanHTML = DOMPurify.sanitize(note.noteContent);
-
-    // 삭제 경고창 및 요청
-    const showDeleteAlert = () => {
-        Swal.fire({
-            title: `쪽지 삭제`,
-            html: '해당 쪽지를 정말 삭제하시겠습니까?<br/>삭제된 쪽지는 복구할 수 없습니다.<br/>※ 나에게 보낸 쪽지인 경우, 받은 쪽지함과 보낸 쪽지함에서 모두 삭제됩니다.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: '삭제',
-            cancelButtonText: '취소',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                deleteNote(null, note.noteNo);
-            }
-        });
-    };
 
     // 날짜 형식 포맷 함수
     const formatDate = (dateString) => {
@@ -63,7 +48,12 @@ const ReceivedNoteModal = ({ note, onClose, handleBookmark, deleteNote }) => {
                     <div className="note-actions">
                         <button
                             className="note-action-button del"
-                            onClick={() => deleteNote(null, note?.noteNo)} // deleteNote 호출
+                            onClick={() => {
+                                showDeleteAlert(note).then(() => {
+                                    // 삭제 후 모달 닫기
+                                    onClose();
+                                });
+                            }}
                         >
                             <FaTrashAlt/>
                         </button>
@@ -71,7 +61,7 @@ const ReceivedNoteModal = ({ note, onClose, handleBookmark, deleteNote }) => {
                             className="note-action-button bookmark"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                handleBookmark(note); // 전달된 handleBookmark 사용
+                                handleBookmark(note);
                             }}>
                             {note.noteReceiverBookmarkedYn === 'Y' ? (
                                 <FaStar className="star-icon active"/>

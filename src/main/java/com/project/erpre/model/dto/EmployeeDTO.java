@@ -51,6 +51,7 @@ public class EmployeeDTO {
         this.employeeEmail = employee.getEmployeeEmail();
         this.employeeImageUrl = employee.getEmployeeImageUrl();
         this.jobId = employee.getJob().getJobId();
+        this.jobRole = employee.getJob().getJobRole();
         this.departmentId = employee.getDepartment().getDepartmentId();
     }
 }

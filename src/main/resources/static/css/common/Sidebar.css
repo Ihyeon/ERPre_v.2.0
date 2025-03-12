@@ -21,7 +21,7 @@
 /* 🔴 이메일메뉴 */
 .mail-write { display: block; font-size: 16px; font-weight: 500; color: #f4f4f4; text-align: center; text-decoration: none; padding: 6px 0; user-select: none; } 
 .mail-write-span { border: 1px solid #e1e1e1; border-radius: 8px; background-color: #007CC1; cursor: pointer; height: 100%; justify-content: center; align-items: center; display: flex; margin-bottom: 13px; } 
-.bi-pencil-square::before { color: #f4f4f4; } 
+.bi-pencil-square::before { }
 .mail-line { border: 1px solid #e1e1e1; margin-top: 15px; margin-bottom: 10px; } 
 .menu-back { cursor:pointer } 
 .menu-back:hover { background-color: #f4f4f4; } 

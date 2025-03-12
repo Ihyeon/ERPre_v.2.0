@@ -78,6 +78,7 @@ public class TalkController {
         // 각 수신자에게 쪽지 전송
         for (String receiverId : note.getNoteReceiverIds()) {
             messagingTemplate.convertAndSendToUser(receiverId, "/queue/note", savedNote);
+            log.info("전송 주소: /user/{}/queue/note", receiverId);
         }
     }
 

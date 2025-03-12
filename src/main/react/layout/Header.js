@@ -7,23 +7,22 @@ import '../../resources/static/css/messenger/Messenger.css';
 import "../../resources/static/css/messenger/Chat.css";
 import "../../resources/static/css/messenger/Note.css";
 import "../../resources/static/css/messenger/Info.css";
-import SockJS from "sockjs-client";
-import {Stomp} from '@stomp/stompjs';
-import {useMessengerHooks} from "../components/messenger/useMessengerHooks";
 import ReceivedNoteModal from "../components/messenger/ReceivedNoteModal";
+import {UserContext} from "../context/UserContext";
+import {useNoteHooks} from "../components/messenger/useNoteHooks";
+import {connected} from "process";
 
 
 function Header() {
 
-    const {
-        isMessengerOpen,
-        setMessengerOpen
-    } = useContext(MessengerContext);
+    const { user, stompClientRef } = useContext(UserContext);
+    const { isMessengerOpen, setMessengerOpen } = useContext(MessengerContext);
 
     const {
         noteList,
         setNoteList,
-    } = useMessengerHooks();
+        fetchData,
+    } = useNoteHooks();
 
     const handleCloseReceivedNoteModal = () => setNewNote(null); // 수신 쪽지 모달 닫기
     const [newNote, setNewNote] = useState(null); // 수신 쪽지 state
@@ -37,48 +36,69 @@ function Header() {
         window.location.href = '/sentMail';
     }
 
-    // 전역 웹소켓 연결 설정 (SockJS와 Stomp)
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8787/talk');
-        const stompClient = Stomp.over(socket);
-        stompClient.debug = () => {};
+        const stompClient = stompClientRef.current;
 
-        stompClient.connect(
-            {},
-            () => {
-                console.log("전역 WebSocket 연결 성공");
+        if (!stompClient) {
+            console.error("🚨 stompClientRef.current가 초기화 실패");
+            return;
+        }
 
-                // 수신 쪽지 구독 - /user/queue/note
-                stompClient.subscribe('/user/queue/note', (noteResponse) => {
-                    const receivedNote = JSON.parse(noteResponse.body);
-                    console.log("수신 쪽지:", receivedNote); // senderId, messageContent, scheduledDate, messageReceiverIds
-
-                    setNoteList((prevNoteList) => [receivedNote, ...prevNoteList]);
-                    setNewNote(receivedNote);
-                });
-            },
-            (error) => {
-                console.log("전역 WebSocket 연결 오류:", error);
+        // WebSocket 연결 상태 확인
+        const checkConnection = () => {
+            if (stompClient.connected) {
+                console.log("✅ 쪽지 WebSocket 연결 성공");
+                subscribeToNotes();
+            } else {
+                console.log("⏳ WebSocket 연결 대기");
+                stompClient.activate();
             }
-        );
+        };
 
-        stompClient.reconnectDelay = 10000;
-        stompClient.activate();
+        // 쪽지 구독
+        const subscribeToNotes = () => {
+            if (stompClient.subscription) {
+                console.log("⚠️ 이미 구독이 활성화");
+                return;
+            }
+
+            const subscription = stompClient.subscribe('/user/queue/note', (noteResponse) => {
+                const receivedNote = JSON.parse(noteResponse.body);
+                console.log("수신 쪽지:", receivedNote);
+
+                setNoteList(prev => [receivedNote, ...prev]);
+
+                fetchData()
+                    .then(() => {
+                        setNewNote(receivedNote);
+                        console.log("쪽지 목록 동기화 완료");
+                    })
+                    .catch(error => {
+                        console.error("쪽지 데이터 업데이트 실패:", error);
+                    });
+            });
+            stompClient.subscription = subscription;
+        };
+
+        stompClient.onConnect = () => {
+            console.log("✅ 쪽지 WebSocket 연결 성공");
+            subscribeToNotes();
+        };
+
+        stompClient.onDisconnect = () => {
+            console.log("❌ 쪽지 WebSocket 연결 끊김");
+        };
+
+        checkConnection();
 
         return () => {
-            stompClient.deactivate()
-                .then(() => console.log("전역 WebSocket 연결 해제 성공"))
-                .catch((error) => console.log("전역 WebSocket 해제 오류", error));
+            if (stompClient.subscription) {
+                stompClient.subscription.unsubscribe();
+                console.log("❌ 쪽지 구독 해제");
+                stompClient.subscription = null;
+            }
         };
-    }, []);
-
-
-    // // 디버깅용
-    // useEffect(() => {
-    //     if (newNote) {
-    //         console.log("모달에 떠야 할 새로운 쪽지:", newNote);
-    //     }
-    // },[newNote]);
+    }, [stompClientRef, fetchData, setNoteList]);
 
     return (
         <header>
