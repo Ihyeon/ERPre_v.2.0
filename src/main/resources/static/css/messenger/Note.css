@@ -33,7 +33,6 @@
 .dropdown-header .dropdown-title svg { transition: transform 0.3s; margin-left: 5px; font-size: 23px; }
 .dropdown-header:hover .dropdown-title svg { transform: rotate(180deg); }
 
-.note-header-icon {  }
 
 /* 본문 */
 .note-list { list-style: none; margin: 0; padding: 0; overflow-y: auto;}
@@ -148,6 +147,7 @@ button.note-employee-search { margin-left: 4px;}
 /* ReceiveredNoteModal.js */
 
 /* 공통 */
+.react-draggable-transparent-selection {  pointer-events: auto; /* auto로 변경해서 클릭 허용 */ }
 .received-note-modal {
     color: #333;
     position: fixed;

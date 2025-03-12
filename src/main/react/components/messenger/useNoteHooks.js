@@ -65,8 +65,7 @@ export const useNoteHooks = () => {
     const handleOpenNote = async (note) => {
         try {
             const response = await axios.put(`/api/messengers/note/${note.noteNo}`);
-            setNoteDetail(response.data);
-            console.log('쪽지 상세 조회 데이터:', response.data);
+            setNoteDetail(response.data || note);
 
             // 🟠 읽음 상태를 UI에 즉시 반영
             setNoteList((prevNotes) =>
@@ -119,22 +118,40 @@ export const useNoteHooks = () => {
         }
     };
 
+
     //  🟠 북마크 선택/해제 함수
     const handleBookmark = async (note) => {
+        const prevBookmarkedYn = note.noteReceiverBookmarkedYn;
         try {
-            await axios.put(`/api/messengers/note/${note.noteNo}/bookmark`);
-
-            // UI 즉시 업데이트 (북마크 토글)
             setNoteList((prevNotes) =>
                 prevNotes.map((n) =>
                     n.noteNo === note.noteNo
-                        ? { ...n, noteReceiverBookmarkedYn: n.noteReceiverBookmarkedYn === "Y" ? "N" : "Y" }
+                        ? { ...n, noteReceiverBookmarkedYn: note.noteReceiverBookmarkedYn }
                         : n
                 )
             );
-            await fetchData();
+            setNoteDetail((prevDetail) =>
+                prevDetail && prevDetail.noteNo === note.noteNo
+                    ? { ...prevDetail, noteReceiverBookmarkedYn: note.noteReceiverBookmarkedYn }
+                    : { ...note }
+            );
+            await axios.put(`/api/messengers/note/${note.noteNo}/bookmark`);
+            await fetchData(); // 서버 동기화 활성화
         } catch (error) {
             console.error("북마크 업데이트 중 오류:", error);
+            setNoteList((prevNotes) =>
+                prevNotes.map((n) =>
+                    n.noteNo === note.noteNo
+                        ? { ...n, noteReceiverBookmarkedYn: prevBookmarkedYn }
+                        : n
+                )
+            );
+            setNoteDetail((prevDetail) =>
+                prevDetail && prevDetail.noteNo === note.noteNo
+                    ? { ...prevDetail, noteReceiverBookmarkedYn: prevBookmarkedYn }
+                    : { ...note, noteReceiverBookmarkedYn: prevBookmarkedYn }
+            );
+            window.showToast("북마크 업데이트에 실패했습니다.");
         }
     };
 
@@ -255,10 +272,6 @@ export const useNoteHooks = () => {
         });
     };
 
-    useEffect(() => {
-        console.log("현재 노트 상태", noteStatus);
-    }, []);
-
     // 🟡 컨텍스트 메뉴 외부 클릭 감지하여 메뉴 숨기기
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -279,7 +292,7 @@ export const useNoteHooks = () => {
     // 🟠 서버 데이터와 로컬 쪽지 목록 동기화
     useEffect(() => {
         setNoteList(fetchNoteList || []);
-        console.log('조회한 쪽지 목록', fetchNoteList);
+        // console.log('조회한 쪽지 목록', fetchNoteList);
     }, [fetchNoteList]);
 
     return {

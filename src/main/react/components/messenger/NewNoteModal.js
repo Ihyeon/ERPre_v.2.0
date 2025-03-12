@@ -15,12 +15,11 @@ import EmployeeSearchModal from "./EmployeeSearchModal";
 // 파일 첨부 (로컬 저장소에 저장, 추후 클라우드 스토리지로 확장 가능)
 // 예약 전송 및 수신자 선택 (이름 입력시 자동완성)
 // ReactQuill 에디터 커스터마이징 (CustomToolbar 사용)
-const NewNoteModal = ({ closeNewNoteModal }) => {
+const NewNoteModal = ({ closeNewNoteModal, initialRecipients = [], }) => {
 
     // 전역 변수 관리
     const { user, stompClientRef } = useContext(UserContext);
 
-    const [receivers, setReceivers] = useState([]); // 선택된 수신 직원 목록
     const [noteContent, setNoteContent] = useState(""); // 발신 메세지
     const [sendToMe, setSendToMe] = useState(false); // 나에게 보내기 여부
     const [scheduledSend, setScheduledSend] = useState(false); // 예약 전송 여부
@@ -32,6 +31,12 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
     const quillRef = useRef(null); // ReactQuill 참조
     const autocompleteRef = useRef(null); // 자동완성 목록 참조
     const inputRef = useRef(null); // 입력 필드 참조
+
+    const uniqueInitRecipients = initialRecipients.filter((emp, index, self) =>
+        index === self.findIndex(e => e.employeeId === emp.employeeId)
+    );
+
+    const [receivers, setReceivers] = useState(uniqueInitRecipients);
 
     // 직원 검색
     const {data: employeeData =[], fetchData} = UseSearch(
@@ -101,7 +106,6 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
         }
     };
 
-
     // 검색된 직원 추가
     const handleAddReceiver = (employee) => {
         setReceivers((prevReceivers) => {
@@ -148,6 +152,26 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
         };
     };
 
+    // "나에게 보내기" 체크박스
+    const handleSendToMe = (checked) => {
+        setSendToMe(checked);
+
+        if (!user) return;
+
+        if (checked) {
+            setReceivers((prev) => {
+                const alreadyIn = prev.some((r) => r.employeeId === user.employeeId);
+                if (!alreadyIn) {
+                    return [...prev, { employeeId: user.employeeId, employeeName: user.employeeName }];
+                }
+                return prev;
+            });
+        } else {
+            // 체크 해제 → 본인을 받는 사람에서 제거
+            setReceivers((prev) => prev.filter((r) => r.employeeId !== user.employeeId));
+        }
+    };
+
     // 쪽지 전송 함수
     const handleSendNote = async () => {
         try {
@@ -175,7 +199,7 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
                     destination: "/app/note",
                     body: JSON.stringify(newNote),
                 });
-                console.log("전송된 쪽지:", newNote);
+                // console.log("전송된 쪽지:", newNote);
             } else {
                 console.error("쪽지 WebSocket 연결 실패");
             }
@@ -185,28 +209,6 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
             console.error('쪽지 전송 오류:', error);
         }
     };
-
-    // // 웹소켓 연결
-    // useEffect(() => {
-    //     const socket = new SockJS('http://localhost:8787/talk');
-    //
-    //     stompClientRef.current = new StompClient({
-    //         webSocketFactory: () => socket,
-    //         reconnectDelay: 10000,
-    //         onConnect: () => {
-    //             console.log("쪽지 전송 WebSocket 연결 성공");
-    //         },
-    //         onDisconnect: () => console.log("쪽지 WebSocket 연결이 닫혔습니다."),
-    //     });
-    //
-    //     stompClientRef.current.activate();
-    //
-    //     return () => {
-    //         stompClientRef.current.deactivate()
-    //             .then(() => console.log("쪽지 WebSocket 연결이 성공적으로 해제되었습니다."))
-    //             .catch((error) => console.error("WebSocket 해제 중 오류:", error));
-    //     };
-    // }, []);
 
     // Quill 모듈 설정
     const quillModules = useMemo(() => {
@@ -222,11 +224,17 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
 
     useEffect(() => {
         fetchData().then(() => {
-            console.log("자동완성 직원 데이터", employeeData);
+            // console.log("자동완성 직원 데이터", employeeData);
         }).catch((error) => {
-            console.error("자동완성 직원 데이터 조회 오류:", error);
+            // console.error("자동완성 직원 데이터 조회 오류:", error);
         });
     }, [searchKeyword])
+
+    useEffect(() => {
+        if (initialRecipients.length > 0) {
+            setReceivers(initialRecipients);
+        }
+    }, [initialRecipients]);
 
     return (
         <>
@@ -293,7 +301,7 @@ const NewNoteModal = ({ closeNewNoteModal }) => {
                                 <input
                                     type="checkbox"
                                     checked={sendToMe}
-                                    onChange={() => setSendToMe(!sendToMe)}
+                                    onChange={(e) => handleSendToMe(e.target.checked)}
                                 />
                                 나에게 보내기
                             </label>

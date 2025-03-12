@@ -1,12 +1,11 @@
-import React, {useContext, useEffect, useRef} from 'react';
-import DOMPurify from "dompurify";
-import {BsEnvelopePlusFill} from "react-icons/bs";
-import {FaStar, FaTrashAlt} from "react-icons/fa";
-import {IoChevronDown} from "react-icons/io5";
+import React, {useContext, useEffect } from 'react';
 import {UserContext} from "../../context/UserContext";
-import NewNoteModal from "./NewNoteModal";
-import ReceivedNoteModal from "./ReceivedNoteModal";
 import {useNoteHooks} from "./useNoteHooks";
+import NoteList from "./NoteList";
+import NoteDropdown from "./NoteDropdown";
+import NoteSearchBar from "./NoteSearchBar";
+import ContextMenu from "./NoteContextMenu";
+import NoteModals from "./NoteModals";
 
 // Note.js (note.css)
 const Note = ({formatDate}) => {
@@ -16,7 +15,6 @@ const Note = ({formatDate}) => {
         // 🟠 쪽지 상태 관리
         isLoading,
         noteList,
-        setNoteList,
         searchKeyword,
         setSearchKeyword,
         noteStatus,
@@ -24,7 +22,6 @@ const Note = ({formatDate}) => {
         setIsNoteDropdownOpen,
         options,
         handleNoteStatus,
-        getPreviewContent,
         noteDetail,
         handleOpenNote,
         handleCloseNote,
@@ -42,148 +39,79 @@ const Note = ({formatDate}) => {
 
     } = useNoteHooks();
 
-    const { user } = useContext(UserContext);
+    const {
+        newReceivedNote,
+        setNewReceivedNote,
+    } = useContext(UserContext);
+
     const handleCloseNoteWithRefresh = () => {
-        handleCloseNote(); // 모달 닫기
-        fetchData(); // 상태 갱신
+        handleCloseNote();
+        fetchData();
     };
 
+    useEffect(() => {
+        if (newReceivedNote) {
+            handleOpenNote(newReceivedNote);
+            setNewReceivedNote(null);
+        }
+    }, [newReceivedNote, handleOpenNote, setNewReceivedNote]);
 
-    return (<div className="note-list-container">
+    return (
+        <div className="note-list-container">
 
         {/* 로딩 상태 렌더링 */}
-        {isLoading ? (<div className="loading-container">
+        {isLoading ? (
+            <div className="loading-container">
                 <div className="loading">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
-            </div>) : (<>
-                {/* 헤더 */}
-                {/* 검색 및 필터 */}
-                <div className="search-wrap">
-                    <div className={`search_box ${searchKeyword ? 'has_text' : ''}`}>
-                        <label className="label_floating">
-                            이름, 내용
-                        </label>
-                        <i className="bi bi-search"></i>
-                        <input
-                            type="text"
-                            className="box search"
-                            value={searchKeyword}
-                            onChange={(e) => setSearchKeyword(e.target.value)}
-                        />
+            </div>) : (
+                <>
 
-                        {/* 검색어 삭제 버튼 */}
-                        {searchKeyword && (<button
-                                className="btn-del"
-                                onClick={() => setSearchKeyword('')}
-                            >
-                                <i className="bi bi-x"></i>
-                            </button>)}
-                    </div>
-                </div>
+            {/* 검색 및 필터 */}
+            <NoteSearchBar
+                searchKeyword={searchKeyword}
+                setSearchKeyword={setSearchKeyword}
+            />
 
-                {/* 드롭 메뉴 & 아이콘 */}
-                <div className="note-header">
-                    <div className="dropdown-header" onClick={() => setIsNoteDropdownOpen(!isNoteDropdownOpen)}>
-                        <h3 className="dropdown-title">
-                            {options.find(opt => opt.value === noteStatus)?.label || '받은 쪽지'}
-                            <IoChevronDown/>
-                        </h3>
-                        {isNoteDropdownOpen && (<div className="dropdown-content">
-                                {options.map((option, index) => (<div
-                                    key={index}
-                                    onClick={() => handleNoteStatus(option)}
-                                    className="dropdown-item"
-                                >
-                                    {option.label}
-                                </div>))}
-                            </div>
+            {/* 드롭 메뉴 & 아이콘 */}
+            <NoteDropdown
+                openNewNoteModal={openNewNoteModal}
+                showDeleteAllAlert={showDeleteAllAlert}
+                noteStatus={noteStatus}
+                options={options}
+                isNoteDropdownOpen={isNoteDropdownOpen}
+                setIsNoteDropdownOpen={setIsNoteDropdownOpen}
+                handleNoteStatus={handleNoteStatus}
+            />
 
-                        )}
-                    </div>
-                    <div className="note-header-icon">
-                        <button className="new-note-button" onClick={openNewNoteModal} aria-label="새로운 쪽지">
-                            <BsEnvelopePlusFill/>
-                        </button>
-                        <button className="delete-note-button" onClick={showDeleteAllAlert} aria-label="전체 삭제">
-                            <FaTrashAlt/>
-                        </button>
-                    </div>
-                </div>
+            {/* 쪽지 리스트 */}
+            <NoteList
+                noteList={noteList}
+                handleOpenNote={handleOpenNote}
+                handleRightClick={handleRightClick}
+                handleBookmark={handleBookmark}
+                formatDate={formatDate}
+            />
 
-                {/* 쪽지 리스트 */}
-                <div className="note-list">
-                    {Array.isArray(noteList) && noteList.length > 0 ? (
-                        noteList.map((note, index) => {
-                            const cleanHTML = DOMPurify.sanitize(note.noteContent);
-                            const previewContent = getPreviewContent(cleanHTML);
+            {/* 🟡 우클릭 메뉴 */}
+            <ContextMenu
+                contextMenu={contextMenu}
+                noteStatus={noteStatus}
+                handleMenuClick={handleMenuClick}
+            />
 
-                            return (<div
-                                className={`note-item ${note.noteReceiverReadYn === 'N' ? 'unread' : ''}`}
-                                key={index}
-                                onClick={() => handleOpenNote(note)}
-                                onContextMenu={(event) => handleRightClick(event, note.noteNo)}
-                            >
-                                    <div
-                                        className="note-star"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleBookmark(note);
-                                        }}
-                                    >
-                                        {note.noteReceiverBookmarkedYn === 'Y' ? (<FaStar className="star-icon active"/>) : (
-                                            <FaStar className="star-icon"/>)}
-                                    </div>
-                                    <div className="note-info">
-                                        <div className="note-sender">{note.employeeName}</div>
-                                        <div className="note-content">{previewContent}</div>
-                                    </div>
-                                <div className="note-date">{formatDate(note.noteSendDate)}</div>
-                            </div>
-                            );
-                    })
-                    ) : (
-                        <div></div>
-                    )}
-                </div>
-            </>)}
-
-
-        {/* 🟡 우클릭 메뉴 */}
-        {contextMenu.visible && (<div
-                className="context-menu"
-                style={{top: `${contextMenu.y}px`, left: `${contextMenu.x}px`, height: 'auto'}}
-            >
-                <ul style={{margin: 0, padding: 0, listStyleType: 'none'}}>
-                    {noteStatus === 'sent' && (<li
-                            onClick={() => handleMenuClick('recall')}
-                            style={{padding: '4px 8px', cursor: 'pointer'}}
-                        >
-                            회수하기
-                        </li>)}
-                    <li
-                        onClick={() => handleMenuClick('delete')}
-                        style={{padding: '4px 8px', cursor: 'pointer'}}
-                    >
-                        삭제
-                    </li>
-                </ul>
-            </div>)}
-
-        {/* 쪽지 전송 모달 */}
-        {isNewNoteModalOpen && (<div className="new-note-modal-content">
-                <NewNoteModal
-                    closeNewNoteModal={closeNewNoteModal}
-                />
-            </div>)}
-
-        {/* 쪽지 수신 모달 */}
-        {noteDetail && (<ReceivedNoteModal
-                note={noteDetail}
-                onClose={handleCloseNoteWithRefresh}
-            />)}
+            {/* 쪽지 전송 모달 */}
+            <NoteModals
+                isNewNoteModalOpen={isNewNoteModalOpen}
+                closeNewNoteModal={closeNewNoteModal}
+                noteDetail={noteDetail}
+                handleCloseNoteWithRefresh={handleCloseNoteWithRefresh}
+            />
+        </>
+        )}
     </div>);
 };
 

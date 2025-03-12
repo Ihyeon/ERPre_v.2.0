@@ -16,11 +16,14 @@ const ReceivedNoteModal = ({ note, onClose }) => {
     const {
         showDeleteAlert,
         handleBookmark,
+        noteDetail,
+        setNoteDetail,
     } = useNoteHooks();
 
 
     const [replyModalOpen, setReplyModalOpen] = useState(false);
-    console.log("받은 쪽지:", note);
+    const displayedNote = noteDetail || note;
+    const [localBookmarkedYn, setLocalBookmarkedYn] = useState(displayedNote.noteReceiverBookmarkedYn);
 
     const cleanHTML = DOMPurify.sanitize(note.noteContent);
 
@@ -40,9 +43,13 @@ const ReceivedNoteModal = ({ note, onClose }) => {
         return `${year}.${month}.${day} ${period} ${String(formattedHour).padStart(2, '0')}:${minutes}`;
     };
 
+    useEffect(() => {
+        setLocalBookmarkedYn(displayedNote.noteReceiverBookmarkedYn);
+    }, [noteDetail]);
+
     return (
         <div>
-        <Draggable>
+        <Draggable cancel=".note-action-button">
             <div className="received-note-modal">
                 <div className="note-modal-header-re">
                     <div className="note-actions">
@@ -61,12 +68,16 @@ const ReceivedNoteModal = ({ note, onClose }) => {
                             className="note-action-button bookmark"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                handleBookmark(note);
+                                const newBookmarkedYn = localBookmarkedYn === "Y" ? "N" : "Y"; // newBookmarkedYn 정의
+                                setLocalBookmarkedYn(newBookmarkedYn); // 낙관적 업데이트
+                                console.log("⭐ 북마크 업데이트:", { ...displayedNote, noteReceiverBookmarkedYn: newBookmarkedYn });
+                                handleBookmark({ ...displayedNote, noteReceiverBookmarkedYn: newBookmarkedYn });
+                                setNoteDetail({ ...displayedNote, noteReceiverBookmarkedYn: newBookmarkedYn }); // 즉시 상태 갱신
                             }}>
-                            {note.noteReceiverBookmarkedYn === 'Y' ? (
-                                <FaStar className="star-icon active"/>
+                            {localBookmarkedYn === "Y" ? ( // localBookmarkedYn 기반 렌더링
+                                <FaStar className="star-icon active" />
                             ) : (
-                                <FaStar className="star-icon"/>
+                                <FaStar className="star-icon" />
                             )}
                         </button>
                         <button

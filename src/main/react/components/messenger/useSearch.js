@@ -28,7 +28,10 @@ const useSearch = (endpoint, searchKeyword = '', status = '', initialParams = {}
                     ...initialParams, // 추가적으로 포함해야 할 요청 파라미터
                 },
             });
+            console.log("✅ fetchData() 실행 후 데이터:", response.data);
+
             setData(response.data);
+            return response.data;
         } catch (error) {
             console.error('데이터를 불러오는 중 오류 발생:', error);
         } finally {
