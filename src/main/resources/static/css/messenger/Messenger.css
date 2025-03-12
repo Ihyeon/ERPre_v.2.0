@@ -18,9 +18,12 @@ h3 { color: black; }
 .messenger-header .messenger-close { position: absolute; right: 20px; top: 10px; cursor: pointer; color: rgb(188, 187, 187); font-size: 25px; }
 
 /* 검색창 */
-.search-wrap { margin: 10px 0; padding: 1px 0px 9px 1px; display: flex; align-items: center;}
+.search-wrap { margin: 10px 0; padding: 1px 0px 9px 0px; display: flex; align-items: center;}
 .messenger-panel .search_box { border-radius: 23px; background-color: #f4f4f478; margin-right: 5px; width: 264px; margin-left: 18px; }
-.note-list-container .messenger-panel .search_box { border-radius: 23px; background-color: #f4f4f478; margin-right: 5px; width: 290px;}
+
+.note-list-container .search_box { border-radius: 23px; background-color: #f4f4f478; margin-right: 5px; width: 295px; margin-left:0px;}
+.note-list-container .search_box .box { width: 255px; }
+
 .messenger-panel .box { background-color: #f4f4f478; border-radius: 23px; }
 .messenger-panel .search_box.has_text { border-color: black; }
 .messenger-panel .search_box.has_text input { margin-left: 4px; }

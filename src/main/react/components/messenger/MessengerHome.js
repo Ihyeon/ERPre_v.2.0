@@ -74,7 +74,7 @@ const MessengerHome = () => {
                     className="box search"
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
-                    style={{width: '190px'}}
+                    style={{width: '229px'}}
                 />
 
                 {/* 검색어 삭제 버튼 */}
