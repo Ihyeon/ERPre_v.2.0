@@ -167,7 +167,6 @@ export const useNoteHooks = () => {
             } else {
                 console.error("쪽지 회수 중 오류 발생:", error);
             }
-
             await fetchData();
         }
     };
@@ -187,7 +186,7 @@ export const useNoteHooks = () => {
                 try {
                     console.log("쪽지 회수 성공");
                     await recallNote(note.noteNo); // 개별 삭제
-                    window.showToast("쪽지가 회수되었습니다");
+                    // window.showToast("쪽지가 회수되었습니다");
                 } catch (error) {
                     console.error("쪽지 회수 실패", error);
                     window.showToast("쪽지 회수 중 오류가 발생했습니다");

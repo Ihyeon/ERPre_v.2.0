@@ -10,7 +10,8 @@ const NoteDropdown = ({openNewNoteModal, showDeleteAllAlert, noteStatus, options
                     {options.find(opt => opt.value === noteStatus)?.label || '받은 쪽지'}
                     <IoChevronDown/>
                 </h3>
-                {isNoteDropdownOpen && (<div className="dropdown-content">
+                {isNoteDropdownOpen && (
+                    <div className="dropdown-content">
                         {options.map((option, index) => (<div
                                 key={index}
                                 onClick={() => handleNoteStatus(option)}
@@ -18,7 +19,8 @@ const NoteDropdown = ({openNewNoteModal, showDeleteAllAlert, noteStatus, options
                             >
                                 {option.label}
                             </div>))}
-                    </div>)}
+                    </div>)
+                }
             </div>
             <div className="note-header-icon">
                 <button className="new-note-button" onClick={openNewNoteModal} aria-label="새로운 쪽지">
