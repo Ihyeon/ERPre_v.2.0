@@ -6,32 +6,30 @@ import {useChatHooks} from "./useChatHooks";
 import {RiChatNewFill} from "react-icons/ri";
 import {UserContext} from "../../context/UserContext";
 
-const Chat = ({
-                  chatList,
-                  setChatList,
-                  selectedChat,
-                  isChatModalOpen,
-                  openChatModal,
-                  closeChatModal,
-                  fetchChatList
-              }) => {
+const Chat = () => {
 
     const {
-        // 🟡 우클릭
+        chatList,
+        setChatList,
+        searchKeyword,
+        setSearchKeyword,
+        handleChange,
         menuVisible,
         menuPosition,
         handleContextMenu,
         handleMenuClick,
-    } = useChatHooks(chatList, fetchChatList);
+        selectedChat,
+        isChatModalOpen,
+        openChatModal,
+        closeChatModal,
+        fetchChatList
+    } = useChatHooks();
 
     const {user} = useContext(UserContext);
-
-    // 새 채팅 모달 열기/닫기 핸들러
-    const [isEmployeeSearchModalOpen, setEmployeeSearchModalOpen] = useState(false);
+    const [isEmployeeSearchModalOpen, setEmployeeSearchModalOpen] = React.useState(false);
     const openEmployeeSearchModal = () => setEmployeeSearchModalOpen(true);
     const closeEmployeeSearchModal = () => setEmployeeSearchModalOpen(false);
 
-    // 날짜와 시간 포맷팅 함수
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const now = new Date();
@@ -50,9 +48,37 @@ const Chat = ({
         }
     };
 
-
     return (
         <div className="chat-list-container">
+
+            {/* 검색창 */}
+            {
+                <div className="search-wrap messenger-search">
+                    <div className={`search_box ${searchKeyword ? 'has_text' : ''}`}>
+                        <label className="label_floating">
+                            참여자, 채팅방 이름, 메세지 내용
+                        </label>
+                        <i className="bi bi-search"></i>
+                        <input
+                            type="text"
+                            className="box search"
+                            value={searchKeyword}
+                            onChange={handleChange}
+                            style={{ width: '265px' }}
+                        />
+                        {/* 검색어 삭제 버튼 */}
+                        {searchKeyword && (
+                            <button
+                                className="btn-del"
+                                onClick={() => setSearchKeyword('')}
+                            >
+                                <i className="bi bi-x"></i>
+                            </button>
+                        )
+                        }
+                    </div>
+                </div>
+            }
 
             {/* 헤더 */}
             <div className="chat-list-header">

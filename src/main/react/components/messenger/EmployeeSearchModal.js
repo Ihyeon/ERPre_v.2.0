@@ -3,7 +3,7 @@ import {useDebounce} from "../common/useDebounce";
 import Pagination from "../common/Pagination";
 import axios from "axios";
 import {TiDelete} from "react-icons/ti";
-import UseSearch from "./useSearch";
+import useSearch from "./useSearch";
 
 const EmployeeSearchModal = ({closeEmployeeSearchModal, fetchChatList, createUrl, onSelectedEmployees, enableAutoComplete = false}) => {
 
@@ -27,7 +27,7 @@ const EmployeeSearchModal = ({closeEmployeeSearchModal, fetchChatList, createUrl
     const {
         data: employeeData = [],
         searchLoading
-    } = UseSearch(endpoint, debouncedEmployeeSearchText, '', initialParams);
+    } = useSearch(endpoint, debouncedEmployeeSearchText, '', initialParams);
 
     // 🔴 검색 결과 총 페이지 및 직원 수 업데이트
     useEffect(() => {

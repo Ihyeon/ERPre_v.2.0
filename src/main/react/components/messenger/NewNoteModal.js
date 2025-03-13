@@ -7,7 +7,7 @@ import SockJS from "sockjs-client";
 import {FaRegPlusSquare} from "react-icons/fa";
 import { Client as StompClient } from '@stomp/stompjs';
 import { UserContext } from "../../context/UserContext";
-import UseSearch from "./useSearch";
+import useSearch from "./useSearch";
 import EmployeeSearchModal from "./EmployeeSearchModal";
 
 // NewNoteModal.js (Note.css): 쪽지 전송 모달 컴포넌트
@@ -39,7 +39,7 @@ const NewNoteModal = ({ closeNewNoteModal, initialRecipients = [], }) => {
     const [receivers, setReceivers] = useState(uniqueInitRecipients);
 
     // 직원 검색
-    const {data: employeeData =[], fetchData} = UseSearch(
+    const {data: employeeData =[], fetchData} = useSearch(
         "/api/messengers/note/employeeList",
         searchKeyword
     );
