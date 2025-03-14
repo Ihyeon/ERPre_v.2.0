@@ -17,33 +17,34 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
+      - name: Setup Node.js 20.17.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0'
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Install Node Dependencies
+        run: npm install
+
+      - name: Build React App (Webpack)
+        run: npx webpack
 
       - name: Build Backend
         run: ./gradlew clean build -x test
 
-      # 🔥 Docker Hub 로그인 단계 추가 (이걸 반드시 추가!)
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Docker Backend Build & Push (username/password는 삭제!)
+      # Docker Backend Build & Push
       - name: Docker Backend Build & Push
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile-backend
+          file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/my-springboot-app:latest
-
-      # Docker Frontend Build & Push (username/password는 삭제!)
-      - name: Docker Frontend Build & Push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile-frontend
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/my-react-app:latest
