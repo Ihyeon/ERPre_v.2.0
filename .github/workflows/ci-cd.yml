@@ -1,0 +1,44 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Backend 빌드
+      - name: Build Backend
+        run: ./gradlew clean build -x test
+
+      # Docker 백엔드 빌드 & 푸시
+      - name: Docker Backend Build & Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile-backend
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/my-springboot-app:latest
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Frontend 빌드 & 푸시
+      - name: Docker Frontend Build & Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile-frontend
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/my-react-app:latest
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
