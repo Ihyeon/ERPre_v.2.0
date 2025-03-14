@@ -1,5 +1,6 @@
 var path = require('path');
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 // 경로 변수 정의
 const salesPath = './components/sales/';
@@ -13,7 +14,7 @@ const messenger = './components/messenger/';
 module.exports = {
     context: path.resolve(__dirname, 'src/main/react'), // 기본 디렉토리 설정
     //npm run watch 자동 리빌드
-      watch: true,
+    //   watch: true, // 개발 환경에서만 사용
       watchOptions: {
         ignored: /node_modules/,
         aggregateTimeout: 300,
@@ -52,14 +53,22 @@ module.exports = {
         // messenger 관련 엔트리 포인트
 
     },
-    devtool: 'source-map', // 소스 맵 생성 설정
-    cache: true, // 캐싱 활성화
+    optimization: {
+        minimize: false, // 압축 비활성화
+        splitChunks: {
+            chunks: 'all', // 코드 분할 활성화 (공통 모듈을 분리해서 빌드 속도 향상)
+        }
+    },
+    devtool: false, // 소스 맵 생성 설정 / 빌드 속도 개선을 위해 생성 안 함, 개발 환경에서 필요
+    cache: {
+        type: 'filesystem',
+    }, // 캐싱 활성화
     output: {
         path: path.resolve(__dirname, 'src/main/resources/static/bundle'), // 출력 경로 설정
         filename: '[name].bundle.js', // 번들 파일 이름 설정
         clean: true // 빌드 시 필요없는 파일 자동삭제해줌
     },
-    mode: 'none', // Webpack 모드 설정 (none: 기본 설정)
+    mode: 'production', // Webpack 모드 설정 (none: 기본 설정)
     module: {
         rules: [
             {
