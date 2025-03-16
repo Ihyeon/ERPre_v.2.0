@@ -33,11 +33,13 @@ public class EmailReceiveService {
     @Autowired
     private EmailReceiveFileRepository emailReceiveFileRepository;
 
-    @Value("${mail.imap.username}")
-    private String imapUsername;
-
-    @Value("${mail.imap.password}")
-    private String imapPassword;
+//    @Value("${mail.imap.username}")
+//    private String imapUsername;
+//
+//    @Value("${mail.imap.password}")
+//    private String imapPassword;
+    private String imapUsername = "dummy_username";
+    private String imapPassword = "dummy_password";
 
 
 
