@@ -1,5 +1,6 @@
 package com.project.erpre;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +21,20 @@ public class ErpreApplication implements CommandLineRunner {
     // private JdbcTemplate jdbcTemplate; // JdbcTemplate을 자동으로 주입받기 위해 선언
 
     public static void main(String[] args) {
+        // .env 파일 로드
+        Dotenv dotenv = Dotenv.load();
+
+        // 환경 변수 로드 확인
+        String databaseUrl = dotenv.get("DATABASE_URL");
+        String databaseUsername = dotenv.get("DATABASE_USERNAME");
+        String databasePassword = dotenv.get("DATABASE_PASSWORD");
+
+        // .env에서 읽어온 환경 변수들을 System 속성으로 설정
+        System.setProperty("spring.datasource.url", databaseUrl);
+        System.setProperty("spring.datasource.username", databaseUsername);
+        System.setProperty("spring.datasource.password", databasePassword);
+
+        // Spring Boot 애플리케이션 실행
         SpringApplication.run(ErpreApplication.class, args);
     }
 
