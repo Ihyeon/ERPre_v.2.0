@@ -57,7 +57,8 @@ module.exports = {
         minimize: false, // 압축 비활성화
         splitChunks: {
             chunks: 'all', // 코드 분할 활성화 (공통 모듈을 분리해서 빌드 속도 향상)
-        }
+        },
+        runtimeChunk: 'single'
     },
     devtool: false, // 소스 맵 생성 설정 / 빌드 속도 개선을 위해 생성 안 함, 개발 환경에서 필요
     cache: {
