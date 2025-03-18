@@ -1,7 +1,6 @@
-version: '3'
 services:
   backend:
-    image: i2hyeon/my-springboot-app:latest
+    image: ${{secrets.DOCKER_USERNAME}}/erpre:latest
     ports:
       - "8787:8787"
     env_file:

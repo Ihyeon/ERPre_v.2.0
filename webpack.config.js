@@ -1,142 +1,117 @@
-var path = require('path');
+const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
-// 경로 변수 정의
-const salesPath = './components/sales/';
-const pricePath = './components/price/';
-const productPath = './components/product/';
-const customerPath = './components/customer/';
-const hrPath = './components/hr/';
-const email = './components/conversation/';
-const messenger = './components/messenger/';
+module.exports = (env, argv) => {
+    const isProduction = argv.mode === 'production';
 
-module.exports = {
-    context: path.resolve(__dirname, 'src/main/react'), // 기본 디렉토리 설정
-    //npm run watch 자동 리빌드
-    //   watch: true, // 개발 환경에서만 사용
-      watchOptions: {
-        ignored: /node_modules/,
-        aggregateTimeout: 300,
-        poll: 1000, // 변경 사항을 감지할 주기 (밀리초)
-      },
-    entry: {
-        login: './components/auth/Login.js', // 로그인
-        main: './components/main/Main.js', // 메인 대시보드
-
-        // Sales 관련 엔트리 포인트
-        order: `${salesPath}Order.js`, // 주문 등록or상세or수정
-        orderList: `${salesPath}OrderList.js`, // 주문 목록 or 주문 등록 승인
-        orderReport: `${salesPath}OrderReport.js`, // 영업실적 보고서
-        orderDispatch: `${salesPath}OrderDispatch.js`, //출고 관리
-
-        // Product 관련 엔트리 포인트
-        productList: `${productPath}ProductList.js`, // 상품 목록
-        productPrice: `${pricePath}Price.js`, // 고객사별 상품 가격 관리(목록/등록/수정)
-        productCategory: `${productPath}ProductCategory.js`, // 상품 카테고리 관리(목록/등록/수정)
-
-        // Customer 관련 엔트리 포인트
-        customerList: `${customerPath}CustomerList.js`, // 고객사 목록
-
-        // HR 관련 엔트리 포인트
-        employeeList: `${hrPath}EmployeeList.js`, // 직원 관리
-        employeeAttend: `${hrPath}EmployeeAttend.js`, // 근태 관리
-        employeeSalary: `${hrPath}EmployeeSalary.js`, // 급여 관리
-
-        // email 관련 엔트리 포인트
-        email: `${email}EmailWrite.js`, // 이메일 작성
-        receivedMail: `${email}ReceivedMail.js`, // 받은 메일함
-        sentMail: `${email}SentMail.js`,// 보낸 메일함
-        draftMailBox: `${email}DraftMailBox.js`, // 임시 보관함
-        TrashMailBox: `${email}TrashMailBox.js`,// 휴지통
-
-        // messenger 관련 엔트리 포인트
-
-    },
-    optimization: {
-        minimize: false, // 압축 비활성화
-        splitChunks: {
-            chunks: 'all', // 코드 분할 활성화 (공통 모듈을 분리해서 빌드 속도 향상)
+    return {
+        context: path.resolve(__dirname, 'src/main/react'), // 기본 디렉토리 설정
+        watch: !isProduction, // 개발 환경에서만 watch 활성화
+        watchOptions: {
+            ignored: /node_modules/,
+            aggregateTimeout: 300,
+            poll: 1000, // 변경 감지 주기 (ms)
         },
-        runtimeChunk: 'single'
-    },
-    devtool: false, // 소스 맵 생성 설정 / 빌드 속도 개선을 위해 생성 안 함, 개발 환경에서 필요
-    cache: {
-        type: 'filesystem',
-    }, // 캐싱 활성화
-    output: {
-        // path: path.resolve(__dirname, 'src/main/resources/static/bundle'), // 출력 경로 설정
-        path: path.resolve(__dirname, 'build/static/'), // 출력 경로 설정
-        filename: '[name].bundle.js', // 번들 파일 이름 설정
-        clean: true // 빌드 시 필요없는 파일 자동삭제해줌
-    },
-    mode: 'production', // Webpack 모드 설정 (none: 기본 설정)
-    module: {
-        rules: [
-            {
-                test: /\.m?js$/, // .mjs 또는 .js 파일을 처리
-                resolve: {
-                    fullySpecified: false // 확장자를 명시하지 않아도 되도록 설정(특히 axios나 다른 모듈에서 발생하는 확장자 문제를 피할 수 있다.)
-                }
+        entry: {
+            login: './components/auth/Login.js',
+            main: './components/main/Main.js',
+            // Sales
+            order: './components/sales/Order.js',
+            orderList: './components/sales/OrderList.js',
+            orderReport: './components/sales/OrderReport.js',
+            orderDispatch: './components/sales/OrderDispatch.js',
+            // Product
+            productList: './components/product/ProductList.js',
+            productPrice: './components/price/Price.js',
+            productCategory: './components/product/ProductCategory.js',
+            // Customer
+            customerList: './components/customer/CustomerList.js',
+            // HR
+            employeeList: './components/hr/EmployeeList.js',
+            employeeAttend: './components/hr/EmployeeAttend.js',
+            employeeSalary: './components/hr/EmployeeSalary.js',
+            // Email
+            email: './components/conversation/EmailWrite.js',
+            receivedMail: './components/conversation/ReceivedMail.js',
+            sentMail: './components/conversation/SentMail.js',
+            draftMailBox: './components/conversation/DraftMailBox.js',
+            TrashMailBox: './components/conversation/TrashMailBox.js',
+        },
+        mode: isProduction ? 'production' : 'development',
+        devtool: isProduction ? false : 'source-map', // 개발 시 디버깅 용이
+        cache: {
+            type: 'filesystem',
+        },
+        output: {
+            path: path.resolve(__dirname, 'src/main/resources/static/bundle'),
+            filename: '[name].bundle.js',
+            clean: true,
+        },
+        optimization: {
+            minimize: isProduction, // 배포 시 압축
+            minimizer: isProduction ? [new TerserPlugin()] : [],
+            splitChunks: {
+                chunks: 'all',
+                automaticNameDelimiter: '.',
             },
-            {
-                test: /\.js?$/, // .js 파일 처리
-                exclude: /(node_modules)/, // node_modules 제외
-                use: {
-                    loader: 'babel-loader', // Babel 로더 사용
-                    options: {
-                        // presets: ['@babel/preset-env', '@babel/preset-react'] // Babel 프리셋 설정
-                        presets: [
-                            ['@babel/preset-react', { development: false }]
-                        ]
-                    }
-                }
-            },
-            {
-                test: /\.css$/, // .css 파일 처리
-                use: ['style-loader', 'css-loader'] // 스타일 및 CSS 로더 사용
-            },
-            {
-                test: /\.(png|jpg|jpeg|gif|svg)$/, // 이미지 파일 처리
-                use: [
-                    {
-                        loader: 'file-loader',
+            runtimeChunk: false,
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.m?js$/,
+                    resolve: {
+                        fullySpecified: false, // 모듈 확장자 생략 허용
+                    },
+                },
+                {
+                    test: /\.js?$/,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: 'babel-loader',
                         options: {
-                            name: '[path][name].[ext]', // 파일 이름 및 경로 설정
-                            context: 'src/main/react', // 소스 경로 설정
+                            presets: [
+                                '@babel/preset-env', // ES6+ 지원
+                                ['@babel/preset-react', { development: !isProduction }],
+                            ],
                         },
                     },
-                ],
-            }
-        ]
-    },
-    plugins: [
-        new webpack.ProvidePlugin({
-            process: 'process/browser', // "process is not defined" 오류 해결
-        }),
-        // Webpack 빌드가 완료되면 시간을 출력하는 플러그인
-        function () {
-            // Webpack의 done 후크를 사용하여 빌드가 완료될 때 호출
-            this.hooks.done.tap('DonePlugin', (stats) => {
-                const now = new Date().toLocaleString();
-                // 콘솔에 빨간색 구분선 및 메시지 출력
-                console.log("\x1b[31m%s\x1b[0m", "\n\n\n=============================================");
-                console.log("\x1b[31m%s\x1b[0m", `${now} 빌드 완료`); // 빌드 완료 시간 출력
-                console.log("\x1b[31m%s\x1b[0m", "=============================================");
-            });
+                },
+                {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader'],
+                },
+                {
+                    test: /\.(png|jpg|jpeg|gif|svg)$/,
+                    type: 'asset/resource', // Webpack 5 내장 모듈
+                    generator: {
+                        filename: 'assets/[name][ext]', // 간소화된 출력 경로
+                    },
+                },
+            ],
         },
-    ],
-    // resolve는 모듈을 해석할 때, 필요한 설정을 지정하는 옵션
-    resolve: {
-        // fallback 옵션은 브라우저 환경에서 Node.js의 일부 기능을 사용할 수 있도록 대체 모듈을 지정하는 데 사용됩니다.
-        fallback: {
-            // 'process' 모듈을 브라우저에서 사용할 수 있도록 'process/browser' 모듈을 대체로 지정합니다.
-            process: require.resolve('process/browser'),
-            "url": require.resolve("url/") // 브라우저에서 'url' 모듈을 사용할 수 있도록 합니다.
+        plugins: [
+            new webpack.ProvidePlugin({
+                process: 'process/browser', // "process is not defined" 해결
+            }),
+            {
+                apply: (compiler) => {
+                    compiler.hooks.done.tap('DonePlugin', (stats) => {
+                        const now = new Date().toLocaleString();
+                        console.log("\x1b[31m%s\x1b[0m", "\n\n\n=============================================");
+                        console.log("\x1b[31m%s\x1b[0m", `${now} 빌드 완료`);
+                        console.log("\x1b[31m%s\x1b[0m", "=============================================");
+                    });
+                },
+            },
+        ],
+        resolve: {
+            modules: [path.resolve(__dirname, 'src/main/react'), 'node_modules'],
+            extensions: ['.js', '.jsx'], // .jsx 지원 추가
+            fallback: {
+                url: require.resolve('url/'), // url 모듈 대체
+            },
         },
-        alias: {
-            'process': 'process/browser',
-        },
-
-    }
+    };
 };

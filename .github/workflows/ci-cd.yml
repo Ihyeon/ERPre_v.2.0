@@ -26,19 +26,19 @@ jobs:
         run: chmod +x gradlew
 
       - name: Install Node Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build React App (Webpack)
         run: npm run build
 
-      - name: "Debug: Check Webpack Output"
-        run: ls -R ./build/static/
+      - name: Debug - Check Webpack Output
+        run: ls -R ./src/main/resources/static/bundle || echo "⚠️ Webpack 출력 디렉토리 없음!"
 
       - name: Build Backend
         run: ./gradlew clean build -x test
 
-      - name: "Debug: Print Current Directory"
-        run: pwd
+      - name: Debug - Check Build Directory
+        run: ls -R ./build || echo "⚠️ build 디렉토리 없음!"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -46,14 +46,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: "Debug: Print Build Directory"
-        run: ls -R ./build/ || echo "⚠️ build/ 디렉토리 없음!"
-
-      - name: "Ensure Build Directory Exists for Docker"
-        run: mkdir -p build/static && touch build/static/.keep
-
-      # Docker Backend Build & Push
-      - name: Docker Backend Build & Push
+      - name: Docker Build & Push
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -73,19 +66,27 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            if [ ! -d "~/erpre/.git" ]; then
-              rm -rf ~/erpre  
-              git clone https://github.com/Ihyeon/ERPre_v.2.0.git ~/erpre
+            # 디렉토리 없으면 새로 생성, 있으면 업데이트
+            if [ ! -d "~/erpre" ]; then
+              mkdir -p ~/erpre
+              cd ~/erpre
+              git init
+              git remote add origin https://github.com/Ihyeon/ERPre_v.2.0.git
             fi
             
             cd ~/erpre
-            
-            git reset --hard
-            git pull origin develop
-            
+            git fetch origin
+            git reset --hard origin/develop
+
+            # .env 파일 생성
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
             echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> .env
             echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
-            
+            echo "CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }}" >> .env
+            echo "COOKIE_DOMAIN=${{ secrets.COOKIE_DOMAIN }}" >> .env
+            echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+
+            # Docker 이미지 풀 및 배포
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/erpre:latest
             sudo docker-compose up -d
             sudo docker image prune -f

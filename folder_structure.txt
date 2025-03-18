@@ -81,435 +81,10 @@ C:.
 |   \---generated-test-sources
 |       \---annotations
 +---build
-|   |   bootJarMainClassName
-|   |   
-|   +---classes
-|   |   \---java
-|   |       +---main
-|   |       |   +---com
-|   |       |   |   \---project
-|   |       |   |       \---erpre
-|   |       |   |           |   AppConfig.class
-|   |       |   |           |   ErpreApplication.class
-|   |       |   |           |   
-|   |       |   |           +---auth
-|   |       |   |           |       AuthController.class
-|   |       |   |           |       CustomUserDetailsService.class
-|   |       |   |           |       LoginRequest$LoginRequestBuilder.class
-|   |       |   |           |       LoginRequest.class
-|   |       |   |           |       
-|   |       |   |           +---config
-|   |       |   |           |       AwsConfig.class
-|   |       |   |           |       WebConfig.class
-|   |       |   |           |       WebSecurityConfig.class
-|   |       |   |           |       WebSocketConfig$1.class
-|   |       |   |           |       WebSocketConfig.class
-|   |       |   |           |       
-|   |       |   |           +---controller
-|   |       |   |           |       AttendanceController.class
-|   |       |   |           |       CategoryController.class
-|   |       |   |           |       CustomerController.class
-|   |       |   |           |       DispatchController.class
-|   |       |   |           |       EmailReceiveController.class
-|   |       |   |           |       EmailSendController.class
-|   |       |   |           |       EmployeeController.class
-|   |       |   |           |       FileController.class
-|   |       |   |           |       MainController.class
-|   |       |   |           |       MessengerController.class
-|   |       |   |           |       OrderController$OrderStatusCount.class
-|   |       |   |           |       OrderController$SettlementResponse.class
-|   |       |   |           |       OrderController$SettlementTotalsResponse.class
-|   |       |   |           |       OrderController.class
-|   |       |   |           |       OrderDetailController.class
-|   |       |   |           |       OrderDispatchController.class
-|   |       |   |           |       OrderReportController.class
-|   |       |   |           |       PriceController.class
-|   |       |   |           |       ProductController.class
-|   |       |   |           |       SalaryController.class
-|   |       |   |           |       TalkController.class
-|   |       |   |           |       WarehouseController.class
-|   |       |   |           |       
-|   |       |   |           +---model
-|   |       |   |           |   +---dto
-|   |       |   |           |   |       AndroidDispatchDTO$AndroidDispatchDTOBuilder.class
-|   |       |   |           |   |       AndroidDispatchDTO.class
-|   |       |   |           |   |       CategoryDTO$CategoryDTOBuilder.class
-|   |       |   |           |   |       CategoryDTO.class
-|   |       |   |           |   |       ChatDTO$ChatDTOBuilder.class
-|   |       |   |           |   |       ChatDTO.class
-|   |       |   |           |   |       ChatFileDTO$ChatFileDTOBuilder.class
-|   |       |   |           |   |       ChatFileDTO.class
-|   |       |   |           |   |       ChatMessageDTO$ChatMessageDTOBuilder.class
-|   |       |   |           |   |       ChatMessageDTO.class
-|   |       |   |           |   |       ChatMessageReadDTO$ChatMessageReadDTOBuilder.class
-|   |       |   |           |   |       ChatMessageReadDTO.class
-|   |       |   |           |   |       ChatParticipantDTO$ChatParticipantDTOBuilder.class
-|   |       |   |           |   |       ChatParticipantDTO$ChatTitleUpdateDTO.class
-|   |       |   |           |   |       ChatParticipantDTO.class
-|   |       |   |           |   |       CustomerDTO$CustomerDTOBuilder.class
-|   |       |   |           |   |       CustomerDTO.class
-|   |       |   |           |   |       DepartmentDTO$DepartmentDTOBuilder.class
-|   |       |   |           |   |       DepartmentDTO.class
-|   |       |   |           |   |       DispatchDTO$DispatchDTOBuilder.class
-|   |       |   |           |   |       DispatchDTO.class
-|   |       |   |           |   |       EmailFileReceiveDTO$EmailFileReceiveDTOBuilder.class
-|   |       |   |           |   |       EmailFileReceiveDTO.class
-|   |       |   |           |   |       EmailFileSendDTO$EmailFileSendDTOBuilder.class
-|   |       |   |           |   |       EmailFileSendDTO.class
-|   |       |   |           |   |       EmailReceiveDTO$EmailReceiveDTOBuilder.class
-|   |       |   |           |   |       EmailReceiveDTO.class
-|   |       |   |           |   |       EmailSendDTO$EmailSendDTOBuilder.class
-|   |       |   |           |   |       EmailSendDTO.class
-|   |       |   |           |   |       EmployeeDTO$EmployeeDTOBuilder.class
-|   |       |   |           |   |       EmployeeDTO.class
-|   |       |   |           |   |       EmployeeStatusDTO$EmployeeStatusDTOBuilder.class
-|   |       |   |           |   |       EmployeeStatusDTO.class
-|   |       |   |           |   |       HqDTO$HqDTOBuilder.class
-|   |       |   |           |   |       HqDTO.class
-|   |       |   |           |   |       JobDTO$JobDTOBuilder.class
-|   |       |   |           |   |       JobDTO.class
-|   |       |   |           |   |       NoteDTO$NoteDTOBuilder.class
-|   |       |   |           |   |       NoteDTO$NoteRequestDTO.class
-|   |       |   |           |   |       NoteDTO.class
-|   |       |   |           |   |       NoteFileDTO$NoteFileDTOBuilder.class
-|   |       |   |           |   |       NoteFileDTO.class
-|   |       |   |           |   |       NoteRecipientDTO$NoteRecipientDTOBuilder.class
-|   |       |   |           |   |       NoteRecipientDTO.class
-|   |       |   |           |   |       OrderDetailDTO$OrderDetailDTOBuilder.class
-|   |       |   |           |   |       OrderDetailDTO.class
-|   |       |   |           |   |       OrderDTO$OrderDTOBuilder.class
-|   |       |   |           |   |       OrderDTO.class
-|   |       |   |           |   |       PriceDTO.class
-|   |       |   |           |   |       ProductDetailsDTO$ProductDetailsDTOBuilder.class
-|   |       |   |           |   |       ProductDetailsDTO.class
-|   |       |   |           |   |       ProductDTO$ProductDTOBuilder.class
-|   |       |   |           |   |       ProductDTO.class
-|   |       |   |           |   |       SalaryDTO$SalaryDTOBuilder.class
-|   |       |   |           |   |       SalaryDTO.class
-|   |       |   |           |   |       WarehouseDTO$WarehouseDTOBuilder.class
-|   |       |   |           |   |       WarehouseDTO.class
-|   |       |   |           |   |       
-|   |       |   |           |   \---entity
-|   |       |   |           |           Attendance.class
-|   |       |   |           |           Category.class
-|   |       |   |           |           Chat.class
-|   |       |   |           |           ChatFile.class
-|   |       |   |           |           ChatMessage.class
-|   |       |   |           |           ChatMessageRead.class
-|   |       |   |           |           ChatMessageReadId.class
-|   |       |   |           |           ChatParticipant.class
-|   |       |   |           |           ChatParticipantId.class
-|   |       |   |           |           Customer.class
-|   |       |   |           |           Department.class
-|   |       |   |           |           Dispatch$DispatchBuilder.class
-|   |       |   |           |           Dispatch.class
-|   |       |   |           |           EmailFileReceive.class
-|   |       |   |           |           EmailFileSend.class
-|   |       |   |           |           EmailReceive.class
-|   |       |   |           |           EmailSend.class
-|   |       |   |           |           Employee$EmployeeBuilder.class
-|   |       |   |           |           Employee.class
-|   |       |   |           |           Job.class
-|   |       |   |           |           Note.class
-|   |       |   |           |           NoteFile.class
-|   |       |   |           |           NoteReceiver.class
-|   |       |   |           |           NoteReceiverId.class
-|   |       |   |           |           Order$OrderBuilder.class
-|   |       |   |           |           Order.class
-|   |       |   |           |           OrderDetail$OrderDetailBuilder.class
-|   |       |   |           |           OrderDetail.class
-|   |       |   |           |           Price.class
-|   |       |   |           |           Product.class
-|   |       |   |           |           ProductDetails$ProductDetailsBuilder.class
-|   |       |   |           |           ProductDetails.class
-|   |       |   |           |           QAttendance.class
-|   |       |   |           |           QCategory.class
-|   |       |   |           |           QChat.class
-|   |       |   |           |           QChatFile.class
-|   |       |   |           |           QChatMessage.class
-|   |       |   |           |           QChatMessageRead.class
-|   |       |   |           |           QChatMessageReadId.class
-|   |       |   |           |           QChatParticipant.class
-|   |       |   |           |           QChatParticipantId.class
-|   |       |   |           |           QCustomer.class
-|   |       |   |           |           QDepartment.class
-|   |       |   |           |           QDispatch.class
-|   |       |   |           |           QEmailFileReceive.class
-|   |       |   |           |           QEmailFileSend.class
-|   |       |   |           |           QEmailReceive.class
-|   |       |   |           |           QEmailSend.class
-|   |       |   |           |           QEmployee.class
-|   |       |   |           |           QJob.class
-|   |       |   |           |           QNote.class
-|   |       |   |           |           QNoteFile.class
-|   |       |   |           |           QNoteReceiver.class
-|   |       |   |           |           QNoteReceiverId.class
-|   |       |   |           |           QOrder.class
-|   |       |   |           |           QOrderDetail.class
-|   |       |   |           |           QPrice.class
-|   |       |   |           |           QProduct.class
-|   |       |   |           |           QProductDetails.class
-|   |       |   |           |           QSalary.class
-|   |       |   |           |           QWarehouse.class
-|   |       |   |           |           Salary.class
-|   |       |   |           |           Warehouse$WarehouseBuilder.class
-|   |       |   |           |           Warehouse.class
-|   |       |   |           |           
-|   |       |   |           +---repository
-|   |       |   |           |       AttendanceRepository.class
-|   |       |   |           |       CategoryRepository.class
-|   |       |   |           |       CategoryRepositoryCustom.class
-|   |       |   |           |       CategoryRepositoryImpl.class
-|   |       |   |           |       ChatFileRepository.class
-|   |       |   |           |       ChatMessageReadRepository.class
-|   |       |   |           |       ChatMessageRepository.class
-|   |       |   |           |       ChatParticipantRepository.class
-|   |       |   |           |       ChatRepository.class
-|   |       |   |           |       ChatRepositoryCustom.class
-|   |       |   |           |       ChatRepositoryImpl.class
-|   |       |   |           |       CustomerRepository.class
-|   |       |   |           |       DepartmentRepository.class
-|   |       |   |           |       DispatchRepository.class
-|   |       |   |           |       EmailReceiveFileRepository.class
-|   |       |   |           |       EmailReceiveRepository.class
-|   |       |   |           |       EmailSendFileRepository.class
-|   |       |   |           |       EmailSendRepository.class
-|   |       |   |           |       EmployeeRepository.class
-|   |       |   |           |       EmployeeRepositoryCustom.class
-|   |       |   |           |       EmployeeRepositoryImpl.class
-|   |       |   |           |       JobRepository.class
-|   |       |   |           |       NoteReceiverRepository.class
-|   |       |   |           |       NoteRepository.class
-|   |       |   |           |       NoteRepositoryCustom.class
-|   |       |   |           |       NoteRepositoryImpl.class
-|   |       |   |           |       OrderDetailRepository.class
-|   |       |   |           |       OrderDispatchRepository.class
-|   |       |   |           |       OrderReportRepository.class
-|   |       |   |           |       OrderRepository.class
-|   |       |   |           |       PriceRepository.class
-|   |       |   |           |       ProductDetailsRepository.class
-|   |       |   |           |       ProductRepository.class
-|   |       |   |           |       ProductRepositoryCustom.class
-|   |       |   |           |       ProductRepositoryImpl.class
-|   |       |   |           |       SalaryRepository.class
-|   |       |   |           |       WarehouseRepository.class
-|   |       |   |           |       
-|   |       |   |           +---service
-|   |       |   |           |       AttendanceService.class
-|   |       |   |           |       CategoryService.class
-|   |       |   |           |       CustomerService.class
-|   |       |   |           |       DispatchService.class
-|   |       |   |           |       EmailReceiveService.class
-|   |       |   |           |       EmailSendService$InvalidEmailAddressException.class
-|   |       |   |           |       EmailSendService.class
-|   |       |   |           |       EmployeeService.class
-|   |       |   |           |       FileService.class
-|   |       |   |           |       MessengerService.class
-|   |       |   |           |       OrderDetailService.class
-|   |       |   |           |       OrderDispatchService.class
-|   |       |   |           |       OrderReportService.class
-|   |       |   |           |       OrderService.class
-|   |       |   |           |       PriceService.class
-|   |       |   |           |       ProductService.class
-|   |       |   |           |       ResourceNotFoundException.class
-|   |       |   |           |       SalaryService.class
-|   |       |   |           |       WarehouseService.class
-|   |       |   |           |       
-|   |       |   |           \---util
-|   |       |   |                   Criteria.class
-|   |       |   |                   PageVO.class
-|   |       |   |                   
-|   |       |   \---emailService
-|   |       |           getEmailSendByEmployeeId.class
-|   |       |           
-|   |       \---test
-|   |           \---com
-|   |               \---project
-|   |                   \---erpre
-|   |                           ErpreApplicationTests.class
-|   |                           
-|   +---generated
-|   |   +---source
-|   |   |   \---querydsl
-|   |   |       +---com
-|   |   |       |   \---project
-|   |   |       |       \---erpre
-|   |   |       |           \---model
-|   |   |       |               \---entity
-|   |   |       |                       QAttendance.java
-|   |   |       |                       QCategory.java
-|   |   |       |                       QChat.java
-|   |   |       |                       QChatFile.java
-|   |   |       |                       QChatMessage.java
-|   |   |       |                       QChatMessageRead.java
-|   |   |       |                       QChatMessageReadId.java
-|   |   |       |                       QChatParticipant.java
-|   |   |       |                       QChatParticipantId.java
-|   |   |       |                       QCustomer.java
-|   |   |       |                       QDepartment.java
-|   |   |       |                       QDispatch.java
-|   |   |       |                       QEmailFileReceive.java
-|   |   |       |                       QEmailFileSend.java
-|   |   |       |                       QEmailReceive.java
-|   |   |       |                       QEmailSend.java
-|   |   |       |                       QEmployee.java
-|   |   |       |                       QJob.java
-|   |   |       |                       QNote.java
-|   |   |       |                       QNoteFile.java
-|   |   |       |                       QNoteReceiver.java
-|   |   |       |                       QNoteReceiverId.java
-|   |   |       |                       QOrder.java
-|   |   |       |                       QOrderDetail.java
-|   |   |       |                       QPrice.java
-|   |   |       |                       QProduct.java
-|   |   |       |                       QProductDetails.java
-|   |   |       |                       QSalary.java
-|   |   |       |                       QWarehouse.java
-|   |   |       |                       
-|   |   |       \---generated
-|   |   \---sources
-|   |       +---annotationProcessor
-|   |       |   \---java
-|   |       |       +---main
-|   |       |       \---test
-|   |       \---headers
-|   |           \---java
-|   |               +---main
-|   |               \---test
-|   +---libs
-|   |       erpre-0.0.1-SNAPSHOT-plain.jar
-|   |       erpre-0.0.1-SNAPSHOT.jar
-|   |       
-|   +---reports
-|   |   \---tests
-|   |       \---test
-|   |           |   index.html
-|   |           |   
-|   |           +---classes
-|   |           |       com.project.erpre.ErpreApplicationTests.html
-|   |           |       
-|   |           +---css
-|   |           |       base-style.css
-|   |           |       style.css
-|   |           |       
-|   |           +---js
-|   |           |       report.js
-|   |           |       
-|   |           \---packages
-|   |                   com.project.erpre.html
-|   |                   
-|   +---resources
-|   |   \---main
-|   |       |   application.properties
-|   |       |   log4jdbc.log4j2.properties
-|   |       |   logback.xml
-|   |       |   orderlisthojin.txt
-|   |       |   
-|   |       +---fonts
-|   |       |       malgun.ttf
-|   |       |       
-|   |       +---static
-|   |       |   +---css
-|   |       |   |   +---common
-|   |       |   |   |       DatePicker.css
-|   |       |   |   |       Footer.css
-|   |       |   |   |       Header.css
-|   |       |   |   |       Layout.css
-|   |       |   |   |       Login.css
-|   |       |   |   |       Main.css
-|   |       |   |   |       Sidebar.css
-|   |       |   |   |       
-|   |       |   |   +---conversation
-|   |       |   |   |       DraftMailBox.css
-|   |       |   |   |       EmailViewerModal.css
-|   |       |   |   |       EmailWrite.css
-|   |       |   |   |       ReceivedMail.css
-|   |       |   |   |       SentMail.css
-|   |       |   |   |       TrashMailBox.css
-|   |       |   |   |       
-|   |       |   |   +---customer
-|   |       |   |   |       CustomerList.css
-|   |       |   |   |       
-|   |       |   |   +---hr
-|   |       |   |   |       EmployeeAttend.css
-|   |       |   |   |       EmployeeList.css
-|   |       |   |   |       EmployeeSalary.css
-|   |       |   |   |       
-|   |       |   |   +---messenger
-|   |       |   |   |       Chat.css
-|   |       |   |   |       Info.css
-|   |       |   |   |       Messenger.css
-|   |       |   |   |       Note.css
-|   |       |   |   |       
-|   |       |   |   +---product
-|   |       |   |   |       Price.css
-|   |       |   |   |       Product.css
-|   |       |   |   |       ProductCategory.css
-|   |       |   |   |       ProductDetailModal.css
-|   |       |   |   |       ProductList.css
-|   |       |   |   |       
-|   |       |   |   \---sales
-|   |       |   |           Order.css
-|   |       |   |           OrderDetail.css
-|   |       |   |           OrderDispatch.css
-|   |       |   |           OrderList.css
-|   |       |   |           OrderListAll.css
-|   |       |   |           OrderListAssigned.css
-|   |       |   |           OrderRegisterApproval.css
-|   |       |   |           OrderRegisterApprovalDetail.css
-|   |       |   |           OrderReport.css
-|   |       |   |           
-|   |       |   \---img
-|   |       |           bell.png
-|   |       |           calendar.png
-|   |       |           cardimg.jpg
-|   |       |           cardimg2.jpg
-|   |       |           erpre.png
-|   |       |           favicon.ico
-|   |       |           favicon1.ico
-|   |       |           favicon2.ico
-|   |       |           logo.png
-|   |       |           logo2.png
-|   |       |           logo3.png
-|   |       |           logo_background.jpg
-|   |       |           search.png
-|   |       |           
-|   |       +---table
-|   |       |       ALTER.TXT
-|   |       |       CREATE.TXT
-|   |       |       INSERT.TXT
-|   |       |       
-|   |       \---templates
-|   |               login.html
-|   |               view.html
-|   |               view_login_backup.html
-|   |               
-|   +---test-results
-|   |   \---test
-|   |       |   TEST-com.project.erpre.ErpreApplicationTests.xml
-|   |       |   
-|   |       \---binary
-|   |               output.bin
-|   |               output.bin.idx
-|   |               results.bin
-|   |               
-|   \---tmp
-|       +---bootJar
-|       |       MANIFEST.MF
-|       |       
-|       +---compileJava
-|       |       previous-compilation-data.bin
-|       |       
-|       +---compileQuerydsl
-|       |       previous-compilation-data.bin
-|       |       
-|       +---compileTestJava
-|       |       previous-compilation-data.bin
-|       |       
-|       +---jar
-|       |       MANIFEST.MF
-|       |       
-|       \---test
+|   \---generated
+|       \---source
+|           \---querydsl
+|               \---generated
 +---gradle
 |   \---wrapper
 |           gradle-wrapper.jar
@@ -709,6 +284,12 @@ C:.
 |   |       webpack.cmd
 |   |       webpack.ps1
 |   |       
+|   +---.cache
+|   |   \---babel-loader
+|   |           1e8cab86d1749e0c76c00e20dd9377b9b7ee7bfe80be9c90e7b971ed8f952325.json
+|   |           a88615722c1098f493151cbfec3b8d3b8a293dbe67b414c50ce4d8ed17fe37c6.json
+|   |           db0c2249992ce7e5dbdc31dfb14b0b64d90548b877f3a09cd9dea70c11e6f2ea.json
+|   |           
 |   +---@alloc
 |   |   \---quick-lru
 |   |           index.d.ts
@@ -85553,242 +85134,6 @@ C:.
 +---out
 |   +---production
 |   |   +---classes
-|   |   |   +---com
-|   |   |   |   \---project
-|   |   |   |       \---erpre
-|   |   |   |           |   AppConfig.class
-|   |   |   |           |   ErpreApplication.class
-|   |   |   |           |   
-|   |   |   |           +---auth
-|   |   |   |           |       AuthController.class
-|   |   |   |           |       CustomUserDetailsService.class
-|   |   |   |           |       LoginRequest$LoginRequestBuilder.class
-|   |   |   |           |       LoginRequest.class
-|   |   |   |           |       
-|   |   |   |           +---config
-|   |   |   |           |       AwsConfig.class
-|   |   |   |           |       WebConfig.class
-|   |   |   |           |       WebSecurityConfig.class
-|   |   |   |           |       WebSocketConfig$1.class
-|   |   |   |           |       WebSocketConfig.class
-|   |   |   |           |       
-|   |   |   |           +---controller
-|   |   |   |           |       AttendanceController.class
-|   |   |   |           |       CategoryController.class
-|   |   |   |           |       CustomerController.class
-|   |   |   |           |       DispatchController.class
-|   |   |   |           |       EmailReceiveController.class
-|   |   |   |           |       EmailSendController.class
-|   |   |   |           |       EmployeeController.class
-|   |   |   |           |       FileController.class
-|   |   |   |           |       MainController.class
-|   |   |   |           |       MessengerController.class
-|   |   |   |           |       OrderController$OrderStatusCount.class
-|   |   |   |           |       OrderController$SettlementResponse.class
-|   |   |   |           |       OrderController$SettlementTotalsResponse.class
-|   |   |   |           |       OrderController.class
-|   |   |   |           |       OrderDetailController.class
-|   |   |   |           |       OrderDispatchController.class
-|   |   |   |           |       OrderReportController.class
-|   |   |   |           |       PriceController.class
-|   |   |   |           |       ProductController.class
-|   |   |   |           |       SalaryController.class
-|   |   |   |           |       TalkController.class
-|   |   |   |           |       WarehouseController.class
-|   |   |   |           |       
-|   |   |   |           +---model
-|   |   |   |           |   +---dto
-|   |   |   |           |   |       AndroidDispatchDTO$AndroidDispatchDTOBuilder.class
-|   |   |   |           |   |       AndroidDispatchDTO.class
-|   |   |   |           |   |       CategoryDTO$CategoryDTOBuilder.class
-|   |   |   |           |   |       CategoryDTO.class
-|   |   |   |           |   |       ChatDTO$ChatDTOBuilder.class
-|   |   |   |           |   |       ChatDTO.class
-|   |   |   |           |   |       ChatFileDTO$ChatFileDTOBuilder.class
-|   |   |   |           |   |       ChatFileDTO.class
-|   |   |   |           |   |       ChatMessageDTO$ChatMessageDTOBuilder.class
-|   |   |   |           |   |       ChatMessageDTO.class
-|   |   |   |           |   |       ChatMessageReadDTO$ChatMessageReadDTOBuilder.class
-|   |   |   |           |   |       ChatMessageReadDTO.class
-|   |   |   |           |   |       ChatParticipantDTO$ChatParticipantDTOBuilder.class
-|   |   |   |           |   |       ChatParticipantDTO$ChatTitleUpdateDTO.class
-|   |   |   |           |   |       ChatParticipantDTO.class
-|   |   |   |           |   |       CustomerDTO$CustomerDTOBuilder.class
-|   |   |   |           |   |       CustomerDTO.class
-|   |   |   |           |   |       DepartmentDTO$DepartmentDTOBuilder.class
-|   |   |   |           |   |       DepartmentDTO.class
-|   |   |   |           |   |       DispatchDTO$DispatchDTOBuilder.class
-|   |   |   |           |   |       DispatchDTO.class
-|   |   |   |           |   |       EmailFileReceiveDTO$EmailFileReceiveDTOBuilder.class
-|   |   |   |           |   |       EmailFileReceiveDTO.class
-|   |   |   |           |   |       EmailFileSendDTO$EmailFileSendDTOBuilder.class
-|   |   |   |           |   |       EmailFileSendDTO.class
-|   |   |   |           |   |       EmailReceiveDTO$EmailReceiveDTOBuilder.class
-|   |   |   |           |   |       EmailReceiveDTO.class
-|   |   |   |           |   |       EmailSendDTO$EmailSendDTOBuilder.class
-|   |   |   |           |   |       EmailSendDTO.class
-|   |   |   |           |   |       EmployeeDTO$EmployeeDTOBuilder.class
-|   |   |   |           |   |       EmployeeDTO.class
-|   |   |   |           |   |       EmployeeStatusDTO$EmployeeStatusDTOBuilder.class
-|   |   |   |           |   |       EmployeeStatusDTO.class
-|   |   |   |           |   |       HqDTO$HqDTOBuilder.class
-|   |   |   |           |   |       HqDTO.class
-|   |   |   |           |   |       JobDTO$JobDTOBuilder.class
-|   |   |   |           |   |       JobDTO.class
-|   |   |   |           |   |       NoteDTO$NoteDTOBuilder.class
-|   |   |   |           |   |       NoteDTO$NoteRequestDTO.class
-|   |   |   |           |   |       NoteDTO.class
-|   |   |   |           |   |       NoteFileDTO$NoteFileDTOBuilder.class
-|   |   |   |           |   |       NoteFileDTO.class
-|   |   |   |           |   |       NoteRecipientDTO$NoteRecipientDTOBuilder.class
-|   |   |   |           |   |       NoteRecipientDTO.class
-|   |   |   |           |   |       OrderDetailDTO$OrderDetailDTOBuilder.class
-|   |   |   |           |   |       OrderDetailDTO.class
-|   |   |   |           |   |       OrderDTO$OrderDTOBuilder.class
-|   |   |   |           |   |       OrderDTO.class
-|   |   |   |           |   |       PriceDTO.class
-|   |   |   |           |   |       ProductDetailsDTO$ProductDetailsDTOBuilder.class
-|   |   |   |           |   |       ProductDetailsDTO.class
-|   |   |   |           |   |       ProductDTO$ProductDTOBuilder.class
-|   |   |   |           |   |       ProductDTO.class
-|   |   |   |           |   |       SalaryDTO$SalaryDTOBuilder.class
-|   |   |   |           |   |       SalaryDTO.class
-|   |   |   |           |   |       WarehouseDTO$WarehouseDTOBuilder.class
-|   |   |   |           |   |       WarehouseDTO.class
-|   |   |   |           |   |       
-|   |   |   |           |   \---entity
-|   |   |   |           |           Attendance.class
-|   |   |   |           |           Category.class
-|   |   |   |           |           Chat.class
-|   |   |   |           |           ChatFile.class
-|   |   |   |           |           ChatMessage.class
-|   |   |   |           |           ChatMessageRead.class
-|   |   |   |           |           ChatMessageReadId.class
-|   |   |   |           |           ChatParticipant.class
-|   |   |   |           |           ChatParticipantId.class
-|   |   |   |           |           Customer.class
-|   |   |   |           |           Department.class
-|   |   |   |           |           Dispatch$DispatchBuilder.class
-|   |   |   |           |           Dispatch.class
-|   |   |   |           |           EmailFileReceive.class
-|   |   |   |           |           EmailFileSend.class
-|   |   |   |           |           EmailReceive.class
-|   |   |   |           |           EmailSend.class
-|   |   |   |           |           Employee$EmployeeBuilder.class
-|   |   |   |           |           Employee.class
-|   |   |   |           |           Job.class
-|   |   |   |           |           Note.class
-|   |   |   |           |           NoteFile.class
-|   |   |   |           |           NoteReceiver.class
-|   |   |   |           |           NoteReceiverId.class
-|   |   |   |           |           Order$OrderBuilder.class
-|   |   |   |           |           Order.class
-|   |   |   |           |           OrderDetail$OrderDetailBuilder.class
-|   |   |   |           |           OrderDetail.class
-|   |   |   |           |           Price.class
-|   |   |   |           |           Product.class
-|   |   |   |           |           ProductDetails$ProductDetailsBuilder.class
-|   |   |   |           |           ProductDetails.class
-|   |   |   |           |           QAttendance.class
-|   |   |   |           |           QCategory.class
-|   |   |   |           |           QChat.class
-|   |   |   |           |           QChatFile.class
-|   |   |   |           |           QChatMessage.class
-|   |   |   |           |           QChatMessageRead.class
-|   |   |   |           |           QChatMessageReadId.class
-|   |   |   |           |           QChatParticipant.class
-|   |   |   |           |           QChatParticipantId.class
-|   |   |   |           |           QCustomer.class
-|   |   |   |           |           QDepartment.class
-|   |   |   |           |           QDispatch.class
-|   |   |   |           |           QEmailFileReceive.class
-|   |   |   |           |           QEmailFileSend.class
-|   |   |   |           |           QEmailReceive.class
-|   |   |   |           |           QEmailSend.class
-|   |   |   |           |           QEmployee.class
-|   |   |   |           |           QJob.class
-|   |   |   |           |           QNote.class
-|   |   |   |           |           QNoteFile.class
-|   |   |   |           |           QNoteReceiver.class
-|   |   |   |           |           QNoteReceiverId.class
-|   |   |   |           |           QOrder.class
-|   |   |   |           |           QOrderDetail.class
-|   |   |   |           |           QPrice.class
-|   |   |   |           |           QProduct.class
-|   |   |   |           |           QProductDetails.class
-|   |   |   |           |           QSalary.class
-|   |   |   |           |           QWarehouse.class
-|   |   |   |           |           Salary.class
-|   |   |   |           |           Warehouse$WarehouseBuilder.class
-|   |   |   |           |           Warehouse.class
-|   |   |   |           |           
-|   |   |   |           +---repository
-|   |   |   |           |       AttendanceRepository.class
-|   |   |   |           |       CategoryRepository.class
-|   |   |   |           |       CategoryRepositoryCustom.class
-|   |   |   |           |       CategoryRepositoryImpl.class
-|   |   |   |           |       ChatFileRepository.class
-|   |   |   |           |       ChatMessageReadRepository.class
-|   |   |   |           |       ChatMessageRepository.class
-|   |   |   |           |       ChatParticipantRepository.class
-|   |   |   |           |       ChatRepository.class
-|   |   |   |           |       ChatRepositoryCustom.class
-|   |   |   |           |       ChatRepositoryImpl.class
-|   |   |   |           |       CustomerRepository.class
-|   |   |   |           |       DepartmentRepository.class
-|   |   |   |           |       DispatchRepository.class
-|   |   |   |           |       EmailReceiveFileRepository.class
-|   |   |   |           |       EmailReceiveRepository.class
-|   |   |   |           |       EmailSendFileRepository.class
-|   |   |   |           |       EmailSendRepository.class
-|   |   |   |           |       EmployeeRepository.class
-|   |   |   |           |       EmployeeRepositoryCustom.class
-|   |   |   |           |       EmployeeRepositoryImpl.class
-|   |   |   |           |       JobRepository.class
-|   |   |   |           |       NoteReceiverRepository.class
-|   |   |   |           |       NoteRepository.class
-|   |   |   |           |       NoteRepositoryCustom.class
-|   |   |   |           |       NoteRepositoryImpl.class
-|   |   |   |           |       OrderDetailRepository.class
-|   |   |   |           |       OrderDispatchRepository.class
-|   |   |   |           |       OrderReportRepository.class
-|   |   |   |           |       OrderRepository.class
-|   |   |   |           |       PriceRepository.class
-|   |   |   |           |       ProductDetailsRepository.class
-|   |   |   |           |       ProductRepository.class
-|   |   |   |           |       ProductRepositoryCustom.class
-|   |   |   |           |       ProductRepositoryImpl.class
-|   |   |   |           |       SalaryRepository.class
-|   |   |   |           |       WarehouseRepository.class
-|   |   |   |           |       
-|   |   |   |           +---service
-|   |   |   |           |       AttendanceService.class
-|   |   |   |           |       CategoryService.class
-|   |   |   |           |       CustomerService.class
-|   |   |   |           |       DispatchService.class
-|   |   |   |           |       EmailReceiveService.class
-|   |   |   |           |       EmailSendService$InvalidEmailAddressException.class
-|   |   |   |           |       EmailSendService.class
-|   |   |   |           |       EmployeeService.class
-|   |   |   |           |       FileService.class
-|   |   |   |           |       MessengerService.class
-|   |   |   |           |       OrderDetailService.class
-|   |   |   |           |       OrderDispatchService.class
-|   |   |   |           |       OrderReportService.class
-|   |   |   |           |       OrderService.class
-|   |   |   |           |       PriceService.class
-|   |   |   |           |       ProductService.class
-|   |   |   |           |       ResourceNotFoundException.class
-|   |   |   |           |       SalaryService.class
-|   |   |   |           |       WarehouseService.class
-|   |   |   |           |       
-|   |   |   |           \---util
-|   |   |   |                   Criteria.class
-|   |   |   |                   PageVO.class
-|   |   |   |                   
-|   |   |   \---emailService
-|   |   |           getEmailSendByEmployeeId.class
-|   |   |           
 |   |   \---resources
 |   |       |   application-test.properties
 |   |       |   application.properties
@@ -85851,25 +85196,33 @@ C:.
 |   |       |       
 |   |       +---static
 |   |       |   +---bundle
-|   |       |   |       customerList.bundle.js
-|   |       |   |       draftMailBox.bundle.js
-|   |       |   |       email.bundle.js
-|   |       |   |       employeeAttend.bundle.js
-|   |       |   |       employeeList.bundle.js
-|   |       |   |       employeeSalary.bundle.js
-|   |       |   |       login.bundle.js
-|   |       |   |       main.bundle.js
-|   |       |   |       order.bundle.js
-|   |       |   |       orderDispatch.bundle.js
-|   |       |   |       orderList.bundle.js
-|   |       |   |       orderReport.bundle.js
-|   |       |   |       productCategory.bundle.js
-|   |       |   |       productList.bundle.js
-|   |       |   |       productPrice.bundle.js
-|   |       |   |       receivedMail.bundle.js
-|   |       |   |       sentMail.bundle.js
-|   |       |   |       TrashMailBox.bundle.js
-|   |       |   |       
+|   |       |   |   |   asset-manifest.json
+|   |       |   |   |   customerList.bundle.js
+|   |       |   |   |   draftMailBox.bundle.js
+|   |       |   |   |   email.bundle.js
+|   |       |   |   |   employeeAttend.bundle.js
+|   |       |   |   |   employeeList.bundle.js
+|   |       |   |   |   employeeSalary.bundle.js
+|   |       |   |   |   index.html
+|   |       |   |   |   login.bundle.js
+|   |       |   |   |   main.bundle.js
+|   |       |   |   |   order.bundle.js
+|   |       |   |   |   orderDispatch.bundle.js
+|   |       |   |   |   orderList.bundle.js
+|   |       |   |   |   orderReport.bundle.js
+|   |       |   |   |   productCategory.bundle.js
+|   |       |   |   |   productList.bundle.js
+|   |       |   |   |   productPrice.bundle.js
+|   |       |   |   |   receivedMail.bundle.js
+|   |       |   |   |   sentMail.bundle.js
+|   |       |   |   |   TrashMailBox.bundle.js
+|   |       |   |   |   
+|   |       |   |   \---static
+|   |       |   |       \---js
+|   |       |   |               main.619d70c9.js
+|   |       |   |               main.619d70c9.js.LICENSE.txt
+|   |       |   |               main.619d70c9.js.map
+|   |       |   |               
 |   |       |   +---css
 |   |       |   |   +---common
 |   |       |   |   |       DatePicker.css
@@ -85953,13 +85306,17 @@ C:.
 |           |               ErpreApplicationTests.class
 |           |               
 |           \---generated_tests
++---public
+|       index.html
+|       
 +---src
+|   |   index.js
+|   |   
 |   +---main
 |   |   +---java
 |   |   |   +---com
 |   |   |   |   \---project
 |   |   |   |       \---erpre
-|   |   |   |           |   .env
 |   |   |   |           |   AppConfig.java
 |   |   |   |           |   ErpreApplication.java
 |   |   |   |           |   
@@ -86227,6 +85584,16 @@ C:.
 |   |       |       malgun.ttf
 |   |       |       
 |   |       +---static
+|   |       |   +---bundle
+|   |       |   |   |   asset-manifest.json
+|   |       |   |   |   index.html
+|   |       |   |   |   
+|   |       |   |   \---static
+|   |       |   |       \---js
+|   |       |   |               main.619d70c9.js
+|   |       |   |               main.619d70c9.js.LICENSE.txt
+|   |       |   |               main.619d70c9.js.map
+|   |       |   |               
 |   |       |   +---css
 |   |       |   |   +---common
 |   |       |   |   |       DatePicker.css

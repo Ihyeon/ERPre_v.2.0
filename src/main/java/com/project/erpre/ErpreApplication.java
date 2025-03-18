@@ -21,7 +21,7 @@ public class ErpreApplication implements CommandLineRunner {
     // private JdbcTemplate jdbcTemplate; // JdbcTemplate을 자동으로 주입받기 위해 선언
 
     public static void main(String[] args) {
-//        // .env 파일 로드
+        // .env 파일 로드
 //        Dotenv dotenv = Dotenv.load();
 //
 //        // 환경 변수 로드 확인
