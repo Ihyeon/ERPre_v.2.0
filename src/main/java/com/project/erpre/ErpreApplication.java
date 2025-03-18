@@ -24,19 +24,17 @@ public class ErpreApplication implements CommandLineRunner {
 //        // .env 파일 로드
 //        Dotenv dotenv = Dotenv.load();
 //
-////        Dotenv dotenv = Dotenv.configure()
-////                .directory("/")
-////                .load();
-//
 //        // 환경 변수 로드 확인
 //        String databaseUrl = dotenv.get("DATABASE_URL");
 //        String databaseUsername = dotenv.get("DATABASE_USERNAME");
 //        String databasePassword = dotenv.get("DATABASE_PASSWORD");
+//        String corsAllowedOrigins = dotenv.get("CORS_ALLOWED_ORIGINS");
 //
 //        // .env에서 읽어온 환경 변수들을 System 속성으로 설정
 //        System.setProperty("spring.datasource.url", databaseUrl);
 //        System.setProperty("spring.datasource.username", databaseUsername);
 //        System.setProperty("spring.datasource.password", databasePassword);
+//        System.setProperty("cors.allowed-origins", corsAllowedOrigins);
 
         // Spring Boot 애플리케이션 실행
         SpringApplication.run(ErpreApplication.class, args);

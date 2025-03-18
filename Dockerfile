@@ -1,7 +1,16 @@
 FROM openjdk:11-slim
-ENV SPRING_DATASOURCE_URL=${DATABASE_URL}
-ENV SPRING_DATASOURCE_USERNAME=${DATABASE_USERNAME}
-ENV SPRING_DATASOURCE_PASSWORD=${DATABASE_PASSWORD}
+
+# 작업 디렉토리를 /app으로 설정
+WORKDIR /app
+
+# JAR 파일 복사
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+
+# Webpack 번들 파일 복사
+RUN mkdir -p static
+COPY --chown=1000:1000 src/main/resources/static/bundle/ static/
+
+
+# JAR 실행 경로
+ENTRYPOINT ["java", "-jar", "app.jar"]

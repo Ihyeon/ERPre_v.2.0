@@ -29,7 +29,7 @@ jobs:
         run: npm install
 
       - name: Build React App (Webpack)
-        run: npx webpack
+        run: npm run build
 
       - name: Build Backend
         run: ./gradlew clean build -x test
@@ -47,7 +47,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/my-springboot-app:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/erpre:latest
 
   deploy:
     needs: build-and-push
@@ -71,10 +71,9 @@ jobs:
             git reset --hard
             git pull origin develop
             
-            echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" > .env
+            echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> .env
             echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
             
-            sudo docker-compose down
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/my-springboot-app:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/erpre:latest
             sudo docker-compose up -d
             sudo docker image prune -f
