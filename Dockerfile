@@ -9,7 +9,7 @@ COPY ${JAR_FILE} app.jar
 
 # Webpack 번들 파일 복사
 RUN mkdir -p static
-COPY ./build/static/ ./static/
+COPY build/static static/
 
 
 # JAR 실행 경로

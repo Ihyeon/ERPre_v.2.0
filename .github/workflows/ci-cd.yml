@@ -46,6 +46,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: "Debug: Print Build Directory"
+        run: ls -R ./build/ || echo "⚠️ build/ 디렉토리 없음!"
+
+      - name: "Ensure Build Directory Exists for Docker"
+        run: mkdir -p build/static && touch build/static/.keep
+
       # Docker Backend Build & Push
       - name: Docker Backend Build & Push
         uses: docker/build-push-action@v5
