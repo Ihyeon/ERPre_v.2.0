@@ -3,3 +3,5 @@ build
 *.md
 .git
 .gitignore
+LICENSE
+README.md
