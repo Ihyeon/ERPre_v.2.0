@@ -65,7 +65,8 @@ module.exports = {
         type: 'filesystem',
     }, // 캐싱 활성화
     output: {
-        path: path.resolve(__dirname, 'src/main/resources/static/bundle'), // 출력 경로 설정
+        // path: path.resolve(__dirname, 'src/main/resources/static/bundle'), // 출력 경로 설정
+        path: path.resolve(__dirname, 'build/static/'), // 출력 경로 설정
         filename: '[name].bundle.js', // 번들 파일 이름 설정
         clean: true // 빌드 시 필요없는 파일 자동삭제해줌
     },
