@@ -104,7 +104,7 @@ const ChatRoomModal = ({chatTitle, chatList, setChatList, chatNo, closeChatModal
     useEffect(() => {
         const connectWebSocket = () => {
             if (!stompClientRef.current) {
-                const socket = new SockJS('http://localhost:8787/talk');
+                const socket = new SockJS(`${process.env.REACT_APP_API_URL}/talk`);
                 const stompClient = new StompClient({
                     webSocketFactory: () => socket,
                     reconnectDelay: 10000,

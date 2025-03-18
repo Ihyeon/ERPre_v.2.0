@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "http://localhost:8787") // React 개발 서버 포트
+@CrossOrigin(origins = "${cors.allowed-origins}") // React 개발 서버 포트
 public class ProductController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);

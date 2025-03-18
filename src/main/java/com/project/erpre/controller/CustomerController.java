@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/customer")
-//@CrossOrigin(origins = "http://localhost:8787") // React 개발 서버 포트
+//@CrossOrigin(origins = "${cors.allowed-origins}")
 public class CustomerController {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerController.class); // Logger 선언

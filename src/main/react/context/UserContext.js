@@ -38,7 +38,7 @@ export const UserProvider = ({ children }) => {
 
     // 전역 웹소켓
     useEffect(() => {
-        const socketFactory = () => new SockJS("http://localhost:8787/talk");
+        const socketFactory = () => new SockJS(`${process.env.REACT_APP_API_URL}//talk`);
         const stompClient = Stomp.over(socketFactory);
         stompClient.debug = () => {};
         stompClient.reconnectDelay = 5000;

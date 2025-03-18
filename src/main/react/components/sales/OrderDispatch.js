@@ -423,7 +423,7 @@ function DispatchInstructionModal ({ show, onClose, assignedWarehouse, dispatchD
     ` : '';
 
     // QR url 연결
-    const qrCodeUrl = `http://localhost:8787/dispatch/${dispatchData ? dispatchData.dispatchNo : ''}`;
+    const qrCodeUrl = `${process.env.REACT_APP_API_URL}/dispatch/${dispatchData ? dispatchData.dispatchNo : ''}`;
 
     // QR코드 모달 표시 상태
     const [showQrModal, setShowQrModal] = useState(false);

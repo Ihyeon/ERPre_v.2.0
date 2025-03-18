@@ -1,6 +1,7 @@
 package com.project.erpre.config;
 
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -18,11 +19,15 @@ import java.util.Map;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    @Value("${cors.allowed-origins}")
+    private String allowedOrigins;
+
     // 웹소켓 연결을 설정하는 엔드포인트 정의
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/talk")
-                .setAllowedOriginPatterns("*") // CORS 허용
+//                .setAllowedOriginPatterns("*") // CORS 허용
+                .setAllowedOriginPatterns(allowedOrigins) // CORS 허용
 //                .setHandshakeHandler(new DefaultHandshakeHandler() {
 //                    @Override
 //                    protected Principal determineUser(@NonNull ServerHttpRequest request, @NonNull WebSocketHandler wsHandler, @NonNull Map<String, Object> attributes) {

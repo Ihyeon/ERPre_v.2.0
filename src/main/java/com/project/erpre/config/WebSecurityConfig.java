@@ -1,6 +1,7 @@
 package com.project.erpre.config;
 
 import com.project.erpre.auth.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,9 @@ public class WebSecurityConfig {
         this.customUserDetailsService = customUserDetailsService;
     }
 
+    @Value("${cors.allowed-origins}")
+    private String allowedOrigins;
+
     // 회원가입이 생략되어 평문 비밀번호를 사용하고 있으므로 BCryptPasswordEncoder 제거
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,8 +41,9 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOriginPatterns(Collections.singletonList("http://localhost:8787")); /
-        configuration.setAllowedOriginPatterns(Collections.singletonList("*")); // 웹소켓에서는 allowedOrigins 대신 allowedOriginPatterns 사용
+//        configuration.setAllowedOriginPatterns(Collections.singletonList("${cors.allowed-origins}")); /
+        configuration.setAllowedOriginPatterns(Collections.singletonList(allowedOrigins)); // 웹소켓에서는 allowedOrigins 대신 allowedOriginPatterns 사용
+//        configuration.setAllowedOriginPatterns(Collections.singletonList("*")); // 웹소켓에서는 allowedOrigins 대신 allowedOriginPatterns 사용
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 모든 HTTP 메서드 명시적 허용
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // 필요한 헤더 추가
         configuration.setAllowCredentials(true); // 쿠키 허용 // test 환경에서 false

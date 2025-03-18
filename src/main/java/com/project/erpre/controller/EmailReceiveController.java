@@ -18,9 +18,9 @@ import com.project.erpre.model.entity.EmailReceive;
 import com.project.erpre.repository.EmailReceiveRepository;
 import com.project.erpre.service.EmailReceiveService;
 
+@CrossOrigin(origins = "${cors.allowed-origins}")
 @RestController
 @RequestMapping("/api/email")
-@CrossOrigin(origins = "http://localhost:8787")
 public class EmailReceiveController {
 
   @Autowired

@@ -28,7 +28,7 @@ import com.project.erpre.service.EmailSendService.InvalidEmailAddressException;
 
 @RestController
 @RequestMapping("/api/email")
-@CrossOrigin(origins = "http://localhost:8787")
+@CrossOrigin(origins = "${cors.allowed-origins}")
 public class EmailSendController {
 
     @Autowired
