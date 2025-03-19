@@ -1,4 +1,4 @@
-// 1. 쿼리DSL
+// 쿼리DSL
 buildscript {
 	ext {
 		queryDslVersion = "5.0.0"
@@ -19,6 +19,12 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(11)  // Java 11 버전 사용
 	}
+}
+
+// JAR 파일 이름 설정
+jar {
+	archiveBaseName.set('erpre')
+	archiveVersion.set('0.0.1-SNAPSHOT')
 }
 
 configurations {

@@ -9,7 +9,7 @@ RUN npm run build  # Webpack으로 src/main/resources/static/bundle 생성
 # Stage 2: 백엔드 빌드 및 실행 (Spring Boot)
 FROM openjdk:11-slim
 WORKDIR /app
-COPY build/libs/*.jar app.jar
+COPY build/libs/erpre-0.0.1-SNAPSHOT.jar app.jar
 COPY --from=frontend /app/src/main/resources/static/bundle static/bundle
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

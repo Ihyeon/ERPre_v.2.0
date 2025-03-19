@@ -37,6 +37,15 @@ jobs:
       - name: Build Backend
         run: ./gradlew clean build -x test
 
+      - name: Check JAR File
+        run: |
+          if [ -f "build/libs/erpre-0.0.1-SNAPSHOT.jar" ]; then
+            echo "JAR 파일이 존재합니다."
+          else
+            echo "JAR 파일이 존재하지 않습니다."
+            exit 1
+          fi
+
       - name: Debug - Check Build Directory
         run: ls -R ./build || echo "⚠️ build 디렉토리 없음!"
 
