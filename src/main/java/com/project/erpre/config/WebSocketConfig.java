@@ -4,7 +4,16 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -28,27 +37,22 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/talk")
 //                .setAllowedOriginPatterns("*") // CORS 허용
                 .setAllowedOriginPatterns(allowedOrigins) // CORS 허용
-//                .setHandshakeHandler(new DefaultHandshakeHandler() {
+                .setHandshakeHandler(new DefaultHandshakeHandler())
+//                .setHandshakeHandler(new DefaultHandshakeHandler() { // WebSocket 인증 핸들러
 //                    @Override
-//                    protected Principal determineUser(@NonNull ServerHttpRequest request, @NonNull WebSocketHandler wsHandler, @NonNull Map<String, Object> attributes) {
-//                        return null; // 모든 사용자가 접근 가능하도록 null 반환
+//                    protected Principal determineUser(@NonNull ServerHttpRequest request,
+//                                                      @NonNull WebSocketHandler wsHandler,
+//                                                      @NonNull Map<String, Object> attributes) {
+//                        Principal principal = request.getPrincipal();
+//                        if (principal != null) {
+//                            System.out.println("WebSocket 연결된 사용자: " + principal.getName());
+//                        } else {
+//                            System.out.println("WebSocket 연결 시 Principal 객체가 null입니다.");
+//                        }
+//                        return principal;
 //                    }
 //                })
-                .setHandshakeHandler(new DefaultHandshakeHandler() { // WebSocket 인증 핸들러
-                    @Override
-                    protected Principal determineUser(@NonNull ServerHttpRequest request,
-                                                      @NonNull WebSocketHandler wsHandler,
-                                                      @NonNull Map<String, Object> attributes) {
-                        Principal principal = request.getPrincipal();
-                        if (principal != null) {
-                            System.out.println("WebSocket 연결된 사용자: " + principal.getName());
-                        } else {
-                            System.out.println("WebSocket 연결 시 Principal 객체가 null입니다.");
-                        }
-                        return principal;
-                    }
-                })
-                .addInterceptors(new HttpSessionHandshakeInterceptor()) // 세션 정보 전달
+                .addInterceptors(new HttpSessionHandshakeInterceptor()) // HTTP 세션 정보 전달
                 .withSockJS();
     }
 
@@ -64,5 +68,26 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     }
 
+    // STOMP 연결 시 인증 정보 설정
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new ChannelInterceptor() {
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+                if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    // SecurityContextHolder에서 현재 인증 정보 가져오기
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+                        accessor.setUser(auth); // WebSocket 세션에 인증된 사용자 설정
+                        System.out.println("WebSocket 인증 설정: " + auth.getName());
+                    } else {
+                        System.out.println("WebSocket 연결 시 인증 정보 없음");
+                    }
+                }
+                return message;
+            }
+        });
+    }
 
 }

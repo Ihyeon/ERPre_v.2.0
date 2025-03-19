@@ -41,9 +41,8 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOriginPatterns(Collections.singletonList("${cors.allowed-origins}")); /
         configuration.setAllowedOriginPatterns(Collections.singletonList(allowedOrigins)); // 웹소켓에서는 allowedOrigins 대신 allowedOriginPatterns 사용
-//        configuration.setAllowedOriginPatterns(Collections.singletonList("*")); // 웹소켓에서는 allowedOrigins 대신 allowedOriginPatterns 사용
+//        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 모든 HTTP 메서드 명시적 허용
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // 필요한 헤더 추가
         configuration.setAllowCredentials(true); // 쿠키 허용 // test 환경에서 false
@@ -55,24 +54,22 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(corsConfigurationSource()) // CORS 설정 활성화 및 직접 설정
+        http
+                .cors().configurationSource(corsConfigurationSource()) // CORS 설정 활성화 및 직접 설정
                 .and()
-                .csrf()
-                .ignoringAntMatchers("/talk/**", "/app/**", "/topic/**", "/ws/**", "/queue/**")
-                    .disable()
+                .csrf().ignoringAntMatchers("/talk/**", "/app/**", "/topic/**", "/ws/**", "/queue/**").disable()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 세션 기반으로 설정
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 필요할 때만 세션 생성
+//                    .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 세션 기반으로 설정
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 📌 세션 사용 안함 (RESTful 방식)
                 .and()
                 .authorizeRequests()
                     .antMatchers("/orderReport", "/employeeAttend", "/employeeSalary").hasAuthority("ROLE_SPECIAL_ACCESS") // 특정 페이지 접근 제한
-                    .antMatchers("/android/api/**").permitAll()
-                    .antMatchers("/**", "/api/**", "/talk/**", "/user/**", "/app/**", "/topic/**", "/ws/**", "/queue/**", "/uploads/**", "/profile-pictures/**", "/chat/**", "/Temp/**").permitAll()
-                    .antMatchers("/",  "/static/**", "/bundle/**", "/img/**", "/css/**", "/fonts/**", "/index.html").permitAll()
-                    .antMatchers("/api/login", "/login").permitAll() // 로그인 앤드포인트 허용 (현재 모든 페이지 접근 허용! 이거 나중에 바꿔야 함)
+                    .antMatchers("/android/api/**").permitAll().antMatchers("/**", "/api/**", "/talk/**", "/user/**", "/app/**", "/topic/**", "/ws/**", "/queue/**", "/uploads/**", "/profile-pictures/**", "/chat/**", "/Temp/**").permitAll().antMatchers("/", "/static/**", "/bundle/**", "/img/**", "/css/**", "/fonts/**", "/index.html").permitAll().antMatchers("/api/login", "/login").permitAll() // 로그인 앤드포인트 허용 (현재 모든 페이지 접근 허용! 이거 나중에 바꿔야 함)
                     .antMatchers("/user/**", "/").hasAnyRole("Staff", "Admin", "Assistant Manager", "Executive", "Director", "Manager")
                     .antMatchers("/admin/**").hasRole("Admin")
-                    .anyRequest().permitAll() // 인증 필요 없음
+                    .anyRequest().authenticated()
+//                    .anyRequest().permitAll() // 인증 필요 없음
                 .and()
                 .formLogin() // 기본 로그인 폼 제공
                     .loginPage("/login")
@@ -85,8 +82,6 @@ public class WebSecurityConfig {
                     .permitAll();
 //                .and()
 //                .anonymous().disable(); // 익명 사용자 비활성화
-
-
         return http.build();
     }
 

@@ -26,11 +26,12 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && !isAnonymous(authentication)) {
             return "redirect:/main";  // 이미 인증된 사용자라면 main 페이지로 리디렉션
         }
+        model.addAttribute("pageName", "Login Page");
         return "login";  // 인증되지 않은 사용자에게 login 페이지 보여줌
 
     }

@@ -38,7 +38,13 @@ export const UserProvider = ({ children }) => {
 
     // 전역 웹소켓
     useEffect(() => {
-        const socketFactory = () => new SockJS(`${process.env.REACT_APP_API_URL}//talk`);
+
+        const API_URL =
+            process.env.NODE_ENV === "production"
+                ? "http://15.164.98.155:8787"  // 배포 환경 (EC2)
+                : "http://localhost:8787"; // 개발 환경 (로컬)
+
+        const socketFactory = () => new SockJS(`${API_URL}//talk`);
         const stompClient = Stomp.over(socketFactory);
         stompClient.debug = () => {};
         stompClient.reconnectDelay = 5000;

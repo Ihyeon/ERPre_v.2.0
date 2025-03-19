@@ -51,10 +51,10 @@ module.exports = (env, argv) => {
         optimization: {
             minimize: isProduction, // 배포 시 압축
             minimizer: isProduction ? [new TerserPlugin()] : [],
-            splitChunks: {
-                chunks: 'all',
-                automaticNameDelimiter: '.',
-            },
+            // splitChunks: {
+            //     chunks: 'all',
+            //     automaticNameDelimiter: '.',
+            // },
             runtimeChunk: false,
         },
         module: {
@@ -72,8 +72,8 @@ module.exports = (env, argv) => {
                         loader: 'babel-loader',
                         options: {
                             presets: [
-                                '@babel/preset-env', // ES6+ 지원
-                                ['@babel/preset-react', { development: !isProduction }],
+                                '@babel/preset-env',
+                                ['@babel/preset-react', { runtime: 'automatic', development: !isProduction }],
                             ],
                         },
                     },
@@ -86,15 +86,17 @@ module.exports = (env, argv) => {
                     test: /\.(png|jpg|jpeg|gif|svg)$/,
                     type: 'asset/resource', // Webpack 5 내장 모듈
                     generator: {
-                        filename: 'assets/[name][ext]', // 간소화된 출력 경로
+                        filename: 'img/[name][ext]', // Spring Boot 정적 경로와 일치
                     },
                 },
             ],
         },
         plugins: [
-            new webpack.ProvidePlugin({
-                process: 'process/browser', // "process is not defined" 해결
-            }),
+            // new webpack.ProvidePlugin({
+            //     process: require.resolve('process/browser'), // "process is not defined" 해결
+            //     React: 'react', // React 자동 제공
+            //     ReactDOM: 'react-dom', // ReactDOM 자동 제공
+            // }),
             {
                 apply: (compiler) => {
                     compiler.hooks.done.tap('DonePlugin', (stats) => {
@@ -107,9 +109,14 @@ module.exports = (env, argv) => {
             },
         ],
         resolve: {
-            modules: [path.resolve(__dirname, 'src/main/react'), 'node_modules'],
-            extensions: ['.js', '.jsx'], // .jsx 지원 추가
+            modules: [
+                path.resolve(__dirname, 'src/main/react'),
+                path.resolve(__dirname, 'src/main/resources/static/css'), // CSS 경로 추가
+                'node_modules',
+            ],
+            extensions: ['.js', '.jsx', '.css'], // .jsx 지원 추가
             fallback: {
+                process: require.resolve('process/browser'),
                 url: require.resolve('url/'), // url 모듈 대체
             },
         },

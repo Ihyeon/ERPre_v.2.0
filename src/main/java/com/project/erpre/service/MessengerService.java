@@ -64,6 +64,7 @@ public class MessengerService {
     // 사용자 인증
     private String getEmployeeIdFromAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("현재 인증된 사용자: " + authentication); // 디버깅
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new IllegalStateException("인증된 사용자를 찾을 수 없습니다. 로그인이 필요합니다.");
         }

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client'; // ReactDOM을 사용하여 React 컴포넌트를 DOM에 렌더링
 import '../../../resources/static/css/common/Layout.css';
@@ -12,8 +13,8 @@ function Login() {
     const fetchEmployeeStatus = async (employeeStatus) => {
 
         try {
-            await axios.put('/api/messengers/info/update', {
-                employeeStatus: employeeStatus
+            await axios.put('/api/messengers/info/update', { employeeStatus: employeeStatus }, {
+                withCredentials: true
             });
         } catch (error) {
             console.error('직원 상태를 업데이트 하는 데 오류 발생', error);
@@ -86,6 +87,7 @@ function Login() {
 
     };
 
+
     return (
         <div className="login-container" style={{ backgroundImage: `url(/img/logo_background.jpg)` }}>
             <div className="login-box">
@@ -119,7 +121,7 @@ function Login() {
 
                     {error && <p className="error-message">{error}</p>}
 
-                        <button type="submit" className="login-btn">로그인</button>
+                    <button type="submit" className="login-btn">로그인</button>
                 </form>
                 <div className="login-footer">
                     <a href="#">비밀번호 초기화</a> | <a href="#">2단계 인증 안내</a>
@@ -131,7 +133,15 @@ function Login() {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <Login />
-);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const rootElement = document.getElementById('root');
+    if (!rootElement) {
+        return;
+    }
+    try {
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(<Login />);
+    } catch (error) {
+    }
+});

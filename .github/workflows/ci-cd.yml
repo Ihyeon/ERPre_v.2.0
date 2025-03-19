@@ -84,7 +84,6 @@ jobs:
             echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
             echo "CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }}" >> .env
             echo "COOKIE_DOMAIN=${{ secrets.COOKIE_DOMAIN }}" >> .env
-            echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
 
             # Docker 이미지 풀 및 배포
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/erpre:latest

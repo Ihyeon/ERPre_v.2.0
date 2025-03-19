@@ -102,9 +102,15 @@ const ChatRoomModal = ({chatTitle, chatList, setChatList, chatNo, closeChatModal
     };
 
     useEffect(() => {
+
+        const API_URL =
+            process.env.NODE_ENV === "production"
+                ? "http://15.164.98.155:8787"  // 배포 환경 (EC2)
+                : "http://localhost:8787"; // 개발 환경 (로컬)
+
         const connectWebSocket = () => {
             if (!stompClientRef.current) {
-                const socket = new SockJS(`${process.env.REACT_APP_API_URL}/talk`);
+                const socket = new SockJS(`${API_URL}/talk`);
                 const stompClient = new StompClient({
                     webSocketFactory: () => socket,
                     reconnectDelay: 10000,

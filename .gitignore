@@ -48,3 +48,7 @@ src/main/resources/static/bundle/*.bundle.js
 
 # 이메일 smtp/ imap 계정 보안 정보
 .env
+
+# 설정 파일 무시
+src/main/resources/application-dev.properties
+src/main/resources/application-prod.properties

@@ -422,8 +422,13 @@ function DispatchInstructionModal ({ show, onClose, assignedWarehouse, dispatchD
     상품 설명: ${dispatchData.productDescription}
     ` : '';
 
+    const API_URL =
+        process.env.NODE_ENV === "production"
+            ? "http://15.164.98.155:8787"  // 배포 환경 (EC2)
+            : "http://localhost:8787"; // 개발 환경 (로컬)
+
     // QR url 연결
-    const qrCodeUrl = `${process.env.REACT_APP_API_URL}/dispatch/${dispatchData ? dispatchData.dispatchNo : ''}`;
+    const qrCodeUrl = `${API_URL}/dispatch/${dispatchData ? dispatchData.dispatchNo : ''}`;
 
     // QR코드 모달 표시 상태
     const [showQrModal, setShowQrModal] = useState(false);

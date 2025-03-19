@@ -9,6 +9,7 @@
 </head>
 <body>
     <div id="root"></div>
-    <script th:src="@{'/bundle/'+${pageName}+'.bundle.js'}"></script>
+<!--    <script th:src="@{'/bundle/'+${pageName}+'.bundle.js'}"></script>-->
+    <script th:src="@{/bundle/main.bundle.js}" defer></script>
 </body>
 </html>
