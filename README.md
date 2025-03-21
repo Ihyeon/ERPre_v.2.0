@@ -1,5 +1,9 @@
 # ERP 시스템
 
+## 배포 주소
+[⭐ERPre⭐](http://15.164.98.155:8787) 
+(아이디: `E001` 비밀번호: `0000`)  <!-- 로그인용 테스트 계정 -->
+
 ## Release Notes
 
 ### v2.0.0 (2024-10-02)
@@ -51,7 +55,7 @@
 <details>
   <summary>API 명세서</summary>
 
-![쉐어드원 3조](https://github.com/user-attachments/assets/64d1218b-d171-419a-af74-1d7beea3b370)
+![image](https://github.com/user-attachments/assets/cec7ceee-7a22-4f55-991c-f37d8c3d08d7)
 
 </details>
 
