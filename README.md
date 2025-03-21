@@ -42,7 +42,7 @@
 <details>
   <summary>E-R Diagram</summary>
   
-![ERD(2)](https://github.com/user-attachments/assets/53f6d577-63fb-4fea-a57b-e1642062783b)
+![Frame 4](https://github.com/user-attachments/assets/5321a3a2-220e-4f64-87ee-4cfa67aaf3a4)
 
 
 </details>
