@@ -1,6 +1,7 @@
 services:
   backend:
-    image: ${{secrets.DOCKER_USERNAME}}/erpre:latest
+    container_name: erpre-backend
+    image: "${DOCKER_USERNAME}/erpre:latest"
     ports:
       - "8787:8787"
     env_file:
