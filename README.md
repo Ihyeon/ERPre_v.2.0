@@ -2,23 +2,21 @@
 
 ## Release Notes
 
-### v1.0.0 (2024-10-02)
-- **첫 번째 릴리스: 기본 ERP 영업 시스템 기능 구현**
-  - 직원/고객 관리
-  - 카테고리/상품 관리
-  - 고객사별 상품 가격 관리
-  - 주문 등록 및 승인
-  - 주문 목록
-  - 주문 현황 보고서 차트
+### v2.0.0 (2024-10-02)
+- **두 번째 릴리스: 부서 간 원활한 소통과 체계적인 데이터 관리가 필요해짐에 따라 프로젝트를 기획**
+  - 인사 관리
+  - 영업 보고서
+  - 사내 메신저 (쪽지 / 채팅)
+  - 이메일
+  - 출고 관리
 
-- **기업 연계 프로젝트** with ㈜ 쉐어드원
-- **개발 기간** : `2024/10/02 ~ 11/12` (4주)
-- **시연영상** : https://www.youtube.com/watch?v=da2D4uyioXY
+- **개발 기간** : `2024/10/02 ~ 11/12` (6주)
+- **시연영상** : https://www.youtube.com/watch?v=fyCAS6lyy1s
 <br/>
 
 ## 🪅 팀원
 
-| **👑심유정** | **김호진** | **박서희** | **손민석** |
+| **👑심이현** | **김호진** | **박서희** | **손민석** |
 | :------: |  :------: | :------: | :------: |
 |[<img src="https://avatars.githubusercontent.com/Ihyeon" height=90> <br/> @Ihyeon](https://github.com/Ihyeon) |[<img src="https://avatars.githubusercontent.com/hjKim1597" height=90> <br/> @hjKim1597](https://github.com/hjKim1597) |[<img src="https://avatars.githubusercontent.com/FORrri" height=90> <br/> @FORrri](https://github.com/FORrri) |[<img src="https://avatars.githubusercontent.com/huhuhahahaha" height=90> <br/> @huhuhahahaha](https://github.com/huhuhahahaha) |
 
@@ -31,7 +29,7 @@
 | **프로그래밍 언어** | Java 11 |
 | **프레임워크** | ✨**Spring Boot** 2.7.18 |
 | **빌드 도구** | Gradle 8.8 |
-| **데이터베이스(DB)** | PostgreSQL 16.3 (AWS RDS) |
+| **데이터베이스(DB)** | PostgreSQL 16.3 (AWS EC2) |
 | **ORM** | Spring Data JPA 2.2 |
 | **프론트엔드(View)** | ✨**React** 18.3.1 |
 | **개발 도구(IDE)** | IntelliJ IDEA, VSCode |
@@ -44,7 +42,7 @@
 <details>
   <summary>E-R Diagram</summary>
   
-![ERD(2)](https://github.com/user-attachments/assets/53f6d577-63fb-4fea-a57b-e1642062783b)
+![Frame 4](https://github.com/user-attachments/assets/5321a3a2-220e-4f64-87ee-4cfa67aaf3a4)
 
 
 </details>
